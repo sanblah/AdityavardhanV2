@@ -5,9 +5,9 @@ import Image from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 const storeImages = [
-    { src: "/images/store/store-1.jpg", alt: "AdityaVardhan Atelier Interior" },
-    { src: "/images/store/store-2.jpg", alt: "AdityaVardhan Fabric Display" },
-    { src: "/images/store/store-3.jpg", alt: "AdityaVardhan Workshop" },
+    { src: "/images/store/store-1.jpg", alt: "Atelier interior" },
+    { src: "/images/store/store-2.jpg", alt: "Fabric display" },
+    { src: "/images/store/store-3.jpg", alt: "Tailoring workshop" },
 ];
 
 const pillars = [

@@ -1,29 +1,7 @@
 @import "tailwindcss";
 
-/* Import Futura PT from Adobe Fonts (if available) or use system fallbacks */
-@font-face {
-  font-family: 'Futura PT';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Futura PT Book'), local('FuturaPT-Book');
-}
-
-@font-face {
-  font-family: 'Futura PT';
-  font-style: normal;
-  font-weight: 500;
-  src: local('Futura PT Demi'), local('FuturaPT-Demi');
-}
-
-@font-face {
-  font-family: 'Futura PT';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Futura PT Bold'), local('FuturaPT-Bold');
-}
-
 @theme {
-  /* Brand Colors from AdityaVardhan Brand Book */
+  /* Brand Colors */
   --color-brand-white: #ffffff;
   --color-brand-gold: #a1846c;
   --color-brand-black: #231f20;
@@ -37,9 +15,9 @@
   --color-accent-dark: #7d6654;
 
   /* Typography */
-  --font-family-logo: var(--font-playfair), "Didot", "Bodoni MT", "Georgia", serif;
-  --font-family-heading: "Futura PT", "Futura", "Century Gothic", "Helvetica Neue", sans-serif;
-  --font-family-body: "Futura PT", "Futura", "Century Gothic", "Helvetica Neue", sans-serif;
+  --font-family-logo: var(--font-avant-garde), "ITC Avant Garde Gothic Std", "Avant Garde", "Century Gothic", sans-serif;
+  --font-family-heading: var(--font-avant-garde), "ITC Avant Garde Gothic Std", "Avant Garde", "Century Gothic", sans-serif;
+  --font-family-body: var(--font-avant-garde), "ITC Avant Garde Gothic Std", "Avant Garde", "Century Gothic", sans-serif;
 
   /* Spacing */
   --spacing-section: clamp(4rem, 10vw, 10rem);
@@ -83,7 +61,7 @@ body {
 /* Brand Logo Typography - elegant serif matching the wordmark */
 .font-logo {
   font-family: var(--font-family-logo);
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: 0.15em;
 }
 

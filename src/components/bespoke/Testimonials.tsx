@@ -10,7 +10,7 @@ const testimonials = [
         occasion: "Wedding Ensemble",
     },
     {
-        quote: "AdityaVardhan doesn't just make suits — they create confidence. The moment I put on my bespoke piece, everything changed.",
+        quote: "This atelier doesn't just make suits — they create confidence. The moment I put on my bespoke piece, everything changed.",
         name: "Vikram Patel",
         occasion: "Business Collection",
     },

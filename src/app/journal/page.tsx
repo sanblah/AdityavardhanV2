@@ -1,8 +1,8 @@
 import { JournalGrid } from "@/components/journal/JournalGrid";
 
 export const metadata = {
-    title: "Journal | ADITYAVARDHAN",
-    description: "Explore the AdityaVardhan lookbook, behind-the-scenes stories, and fabric journals.",
+    title: "Journal | Premium Fashion Atelier",
+    description: "Explore the lookbook, behind-the-scenes stories, and fabric journals.",
 };
 
 export default function JournalPage() {

@@ -1,8 +1,8 @@
 import { BookingFlow } from "@/components/appointment/BookingFlow";
 
 export const metadata = {
-    title: "Book Appointment | ADITYAVARDHAN",
-    description: "Schedule your bespoke tailoring consultation at AdityaVardhan.",
+    title: "Book Appointment | Premium Fashion Atelier",
+    description: "Schedule your bespoke tailoring consultation at our atelier.",
 };
 
 export default function AppointmentPage() {

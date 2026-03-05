@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { BrandLogo } from "./BrandLogo";
 
 export function Hero() {
     return (
@@ -13,9 +14,11 @@ export function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
                 >
-                    <h1 className="font-logo text-[clamp(2rem,8vw,6rem)] uppercase tracking-[0.15em] text-brand-white">
-                        ADITYAVARDHAN
-                    </h1>
+                    <BrandLogo
+                        className="h-auto w-[min(90vw,980px)]"
+                        alt="Brand logo"
+                        priority
+                    />
                 </motion.div>
 
                 {/* Tagline */}

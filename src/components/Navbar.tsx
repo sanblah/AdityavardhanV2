@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DrawLineLink } from "./DrawLineLink";
+import { BrandLogo } from "./BrandLogo";
 
 const navItems = [
     { name: "Home", href: "/" },
@@ -49,9 +50,14 @@ export function Navbar() {
                     {/* Logo */}
                     <Link
                         href="/"
-                        className="font-logo text-lg uppercase tracking-[0.15em] text-brand-white transition-opacity hover:opacity-80"
+                        className="transition-opacity hover:opacity-80"
+                        aria-label="Home"
                     >
-                        ADITYAVARDHAN
+                        <BrandLogo
+                            className="h-auto w-[180px] md:w-[220px]"
+                            alt="Brand logo"
+                            priority
+                        />
                     </Link>
 
                     {/* Desktop Links */}

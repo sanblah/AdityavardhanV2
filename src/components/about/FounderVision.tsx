@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { TextGenerateEffect } from "@/components/ui/aceternity/TextGenerateEffect";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export function FounderVision() {
     const sectionRef = useRef<HTMLDivElement>(null);
@@ -44,9 +45,9 @@ export function FounderVision() {
                 </div>
 
                 <div className="mt-12">
-                    <p className="font-heading text-sm uppercase tracking-[0.3em] text-brand-white/50">
-                        — Aditya Vardhan
-                    </p>
+                    <div className="flex justify-center">
+                        <BrandLogo className="h-auto w-[min(70vw,420px)] opacity-75" alt="Brand logo" />
+                    </div>
                     <p className="mt-2 font-body text-xs uppercase tracking-[0.2em] text-brand-white/30">
                         Founder & Creative Director
                     </p>

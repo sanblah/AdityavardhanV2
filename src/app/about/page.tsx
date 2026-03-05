@@ -4,8 +4,8 @@ import { FounderVision } from "@/components/about/FounderVision";
 import { ParallaxImage } from "@/components/shared/ParallaxImage";
 
 export const metadata = {
-    title: "About | ADITYAVARDHAN",
-    description: "Discover the heritage and craftsmanship behind AdityaVardhan bespoke tailoring.",
+    title: "About | Premium Fashion Atelier",
+    description: "Discover the heritage and craftsmanship behind our bespoke tailoring.",
 };
 
 export default function AboutPage() {
@@ -15,7 +15,7 @@ export default function AboutPage() {
             <section className="relative h-screen w-full overflow-hidden">
                 <ParallaxImage
                     src="/images/group/group-1.jpg"
-                    alt="AdityaVardhan Heritage"
+                    alt="Atelier heritage"
                     className="absolute inset-0 h-full w-full"
                     speed={0.2}
                 />

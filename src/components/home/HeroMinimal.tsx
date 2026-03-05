@@ -2,20 +2,24 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export function HeroMinimal() {
     return (
         <section className="relative z-10 flex h-screen w-full items-center justify-center">
             <div className="flex flex-col items-center px-6 text-center">
                 {/* Brand Name */}
-                <motion.h1
+                <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-                    className="font-logo text-[clamp(2.5rem,10vw,7rem)] uppercase tracking-[0.15em] text-brand-white"
                 >
-                    ADITYAVARDHAN
-                </motion.h1>
+                    <BrandLogo
+                        className="h-auto w-[min(90vw,980px)]"
+                        alt="Brand logo"
+                        priority
+                    />
+                </motion.div>
 
                 {/* Tagline */}
                 <motion.p

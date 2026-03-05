@@ -3,6 +3,7 @@
 import { useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { DrawLineLink } from "./DrawLineLink";
+import { BrandLogo } from "./BrandLogo";
 
 const testimonials = [
     {
@@ -164,11 +165,11 @@ export function Testimonials() {
                         </span>
                     </DrawLineLink>
                     <p className="mx-auto mt-6 max-w-2xl font-heading text-xl font-bold leading-relaxed text-brand-white md:mt-8 md:text-2xl lg:text-4xl">
-                        Words from those who&apos;ve experienced the{" "}
-                        <span className="text-brand-gold">
-                            Adityavardhan difference
-                        </span>
+                        Words from those who&apos;ve experienced
                     </p>
+                    <div className="mt-4 flex justify-center">
+                        <BrandLogo className="h-auto w-[min(78vw,520px)]" alt="Brand logo" />
+                    </div>
                 </motion.div>
 
                 {/* 3D Testimonial Cards */}
@@ -288,7 +289,7 @@ export function Testimonials() {
                     className="mt-12 flex justify-center md:mt-16"
                 >
                     <a
-                        href="https://www.google.com/search?kgmid=/g/11l71d9gbj&q=Adityavardhan"
+                        href="https://www.google.com/search?kgmid=/g/11l71d9gbj&q=boutique+atelier"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group inline-flex items-center gap-3 rounded-full border border-brand-white/10 bg-brand-white/5 px-6 py-3 backdrop-blur-lg transition-all duration-300 hover:border-brand-gold/30 hover:bg-brand-white/10"

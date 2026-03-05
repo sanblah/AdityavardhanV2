@@ -7,7 +7,7 @@ import { gsap, useGSAP } from "@/lib/gsap";
 const storyBlocks = [
     {
         title: "A Legacy of Craft",
-        text: "AdityaVardhan was born from a deep reverence for the art of bespoke tailoring. Every garment we create is a testament to generations of sartorial expertise, meticulously refined to meet the standards of the modern gentleman.",
+        text: "Our atelier was born from a deep reverence for the art of bespoke tailoring. Every garment we create is a testament to generations of sartorial expertise, meticulously refined to meet the standards of the modern gentleman.",
         image: "/images/edited/edited-3.jpg",
     },
     {

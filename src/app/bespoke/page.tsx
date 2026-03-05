@@ -3,8 +3,8 @@ import { ProcessTimeline } from "@/components/bespoke/ProcessTimeline";
 import { Testimonials } from "@/components/bespoke/Testimonials";
 
 export const metadata = {
-    title: "Bespoke Experience | ADITYAVARDHAN",
-    description: "Discover the five-step bespoke tailoring journey at AdityaVardhan.",
+    title: "Bespoke Experience | Premium Fashion Atelier",
+    description: "Discover the five-step bespoke tailoring journey at our atelier.",
 };
 
 export default function BespokePage() {

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { BrandLogo } from "./BrandLogo";
 
 const pageLinks = [
     { name: "About", href: "/about" },
@@ -72,9 +73,10 @@ export function Footer() {
                     {/* Logo */}
                     <Link
                         href="/"
-                        className="font-logo text-xl uppercase tracking-[0.15em] text-brand-white md:text-2xl"
+                        className="transition-opacity hover:opacity-80"
+                        aria-label="Home"
                     >
-                        ADITYAVARDHAN
+                        <BrandLogo className="h-auto w-[190px] md:w-[230px]" alt="Brand logo" />
                     </Link>
 
                     {/* Page Links */}
@@ -104,9 +106,11 @@ export function Footer() {
                     </div>
 
                     {/* Copyright */}
-                    <p className="font-body text-xs text-brand-white/30">
-                        &copy; {new Date().getFullYear()} AdityaVardhan. All rights reserved.
-                    </p>
+                    <div className="flex items-center gap-2 font-body text-xs text-brand-white/30">
+                        <span>&copy; {new Date().getFullYear()}</span>
+                        <BrandLogo className="h-auto w-[95px] opacity-80" alt="Brand logo" />
+                        <span>All rights reserved.</span>
+                    </div>
                 </div>
             </div>
         </footer>
