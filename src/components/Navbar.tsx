@@ -30,6 +30,11 @@ export function Navbar() {
 
     const closeMobileMenu = () => setIsOpen(false);
 
+    const handleNavClick = () => {
+        closeMobileMenu();
+        window.requestAnimationFrame(() => window.scrollTo(0, 0));
+    };
+
     return (
         <>
             {/* Desktop Navbar */}
@@ -47,9 +52,10 @@ export function Navbar() {
                     {/* Logo */}
                     <Link
                         href="/"
+                        scroll
                         className="transition-opacity hover:opacity-80"
                         aria-label="Home"
-                        onClick={closeMobileMenu}
+                        onClick={handleNavClick}
                     >
                         <BrandLogo
                             className="h-auto w-[180px] md:w-[220px]"
@@ -61,7 +67,7 @@ export function Navbar() {
                     {/* Desktop Links */}
                     <div className="hidden items-center gap-2 md:flex">
                         {navItems.map((item) => (
-                            <Link key={item.name} href={item.href}>
+                            <Link key={item.name} href={item.href} scroll onClick={handleNavClick}>
                                 <DrawLineLink
                                     className="text-brand-gold/80"
                                 >
@@ -124,7 +130,8 @@ export function Navbar() {
                                 >
                                     <Link
                                         href={item.href}
-                                        onClick={closeMobileMenu}
+                                        scroll
+                                        onClick={handleNavClick}
                                         className={`font-heading text-2xl font-book uppercase tracking-[0.3em] transition-colors hover:text-brand-gold ${
                                             pathname === item.href
                                                 ? "text-brand-gold"

@@ -39,7 +39,7 @@ export function FounderVision() {
                 <div className="mt-10">
                     <TextGenerateEffect
                         words="We don't just make clothes. We craft an identity — a second skin that speaks of who you are, where you've been, and where you're going."
-                        className="font-logo text-2xl leading-relaxed text-brand-gold/90 md:text-4xl md:leading-relaxed"
+                        className="font-heading text-2xl font-demi leading-relaxed tracking-normal text-brand-gold/90 md:text-4xl md:leading-relaxed"
                         duration={0.6}
                     />
                 </div>

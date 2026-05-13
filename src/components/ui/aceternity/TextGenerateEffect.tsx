@@ -38,13 +38,13 @@ export function TextGenerateEffect({
             {wordsArray.map((word, idx) => (
                 <motion.span
                     key={word + idx}
-                    className="inline-block"
+                    className="mr-[0.28em] inline-block last:mr-0"
                     style={{
                         opacity: 0,
                         filter: filter ? "blur(10px)" : "none",
                     }}
                 >
-                    {word}{" "}
+                    {word}
                 </motion.span>
             ))}
         </div>

@@ -42,122 +42,53 @@ export function ParallaxCards({
     fogIntensity = 1,
 }: ParallaxCardsProps) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const sceneRef = useRef<HTMLDivElement>(null);
-    const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
-    const pointerStateRef = useRef({
-        currentX: 0,
-        currentY: 0,
-        targetX: 0,
-        targetY: 0,
-        rafId: 0,
-    });
+    const [mouse, setMouse] = useState({ x: 0, y: 0 });
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const targetMouse = useRef({ x: 0, y: 0 });
+    const animFrame = useRef<number>(0);
     const isMobile = useIsMobile();
 
     // Sensitivity reduced on mobile for lighter touch interaction
     const effectiveSensitivity = isMobile ? mouseSensitivity * 0.4 : mouseSensitivity;
-    const cardScale = isMobile ? 0.55 : 1;
-
-    const applyTransforms = useCallback(
-        (mouseX: number, mouseY: number) => {
-            if (sceneRef.current) {
-                sceneRef.current.style.transform = `rotateY(${mouseX * effectiveSensitivity * 0.8}deg) rotateX(${-mouseY * effectiveSensitivity * 0.8}deg)`;
-            }
-
-            images.forEach((src, index) => {
-                const card = cardRefs.current[index];
-                if (!card) return;
-
-                const pos = cardPositions[index];
-                const isSelected = selectedIndex === index;
-                const anotherIsSelected = selectedIndex !== null && selectedIndex !== index;
-                const parallaxX = mouseX * pos.z * effectiveSensitivity * 40;
-                const parallaxY = mouseY * pos.z * effectiveSensitivity * 40;
-                const zTranslate = pos.z * -400;
-                const fogOpacity = enableDepthFog ? 1 - pos.z * 0.5 * fogIntensity : 1;
-                const fogBlur = enableDepthFog ? pos.z * 2 * fogIntensity : 0;
-                const finalOpacity = anotherIsSelected ? 0.25 : fogOpacity;
-                const finalScale = isSelected
-                    ? (isMobile ? 1.4 : 1.8)
-                    : anotherIsSelected ? 0.85 : 1;
-
-                card.style.transform = isSelected
-                    ? `translate(-50%, -50%) translate3d(0px, 0px, 200px) rotate(0deg) scale(${finalScale})`
-                    : `translate(-50%, -50%) translate3d(calc(${pos.x}cqw + ${parallaxX}px), calc(${pos.y}cqh + ${parallaxY}px), ${zTranslate}px) rotate(${pos.rotate}deg) scale(${finalScale})`;
-                card.style.opacity = `${finalOpacity}`;
-                card.style.filter = fogBlur > 0 && !isSelected ? `blur(${fogBlur}px)` : "none";
-                card.style.zIndex = `${isSelected ? 50 : Math.round((1 - pos.z) * 10)}`;
-            });
-        },
-        [effectiveSensitivity, enableDepthFog, fogIntensity, isMobile, selectedIndex]
-    );
-
-    const animatePointer = useCallback(function runPointerAnimation() {
-        const pointer = pointerStateRef.current;
-        pointer.currentX += (pointer.targetX - pointer.currentX) * 0.08;
-        pointer.currentY += (pointer.targetY - pointer.currentY) * 0.08;
-
-        applyTransforms(pointer.currentX, pointer.currentY);
-
-        const deltaX = Math.abs(pointer.targetX - pointer.currentX);
-        const deltaY = Math.abs(pointer.targetY - pointer.currentY);
-        if (deltaX > 0.01 || deltaY > 0.01) {
-            pointer.rafId = window.requestAnimationFrame(runPointerAnimation);
-            return;
-        }
-
-        pointer.currentX = pointer.targetX;
-        pointer.currentY = pointer.targetY;
-        applyTransforms(pointer.currentX, pointer.currentY);
-        pointer.rafId = 0;
-    }, [applyTransforms]);
-
-    const queuePointerAnimation = useCallback(() => {
-        if (pointerStateRef.current.rafId !== 0) return;
-        pointerStateRef.current.rafId = window.requestAnimationFrame(animatePointer);
-    }, [animatePointer]);
 
     useEffect(() => {
-        const pointer = pointerStateRef.current;
-
-        applyTransforms(pointer.currentX, pointer.currentY);
-
-        return () => {
-            if (pointer.rafId !== 0) {
-                window.cancelAnimationFrame(pointer.rafId);
-                pointer.rafId = 0;
-            }
+        const animate = () => {
+            setMouse((prev) => ({
+                x: prev.x + (targetMouse.current.x - prev.x) * 0.08,
+                y: prev.y + (targetMouse.current.y - prev.y) * 0.08,
+            }));
+            animFrame.current = requestAnimationFrame(animate);
         };
-    }, [applyTransforms]);
+        animFrame.current = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(animFrame.current);
+    }, []);
 
     const handleMouseMove = useCallback((e: React.MouseEvent) => {
         if (!containerRef.current) return;
         const rect = containerRef.current.getBoundingClientRect();
-        pointerStateRef.current.targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-        pointerStateRef.current.targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-        queuePointerAnimation();
-    }, [queuePointerAnimation]);
+        targetMouse.current = {
+            x: ((e.clientX - rect.left) / rect.width - 0.5) * 2,
+            y: ((e.clientY - rect.top) / rect.height - 0.5) * 2,
+        };
+    }, []);
 
     const handleMouseLeave = useCallback(() => {
-        pointerStateRef.current.targetX = 0;
-        pointerStateRef.current.targetY = 0;
-        queuePointerAnimation();
-    }, [queuePointerAnimation]);
+        targetMouse.current = { x: 0, y: 0 };
+    }, []);
 
     const handleTouchMove = useCallback((e: React.TouchEvent) => {
         if (!containerRef.current) return;
         const touch = e.touches[0];
         const rect = containerRef.current.getBoundingClientRect();
-        pointerStateRef.current.targetX = ((touch.clientX - rect.left) / rect.width - 0.5) * 2;
-        pointerStateRef.current.targetY = ((touch.clientY - rect.top) / rect.height - 0.5) * 2;
-        queuePointerAnimation();
-    }, [queuePointerAnimation]);
+        targetMouse.current = {
+            x: ((touch.clientX - rect.left) / rect.width - 0.5) * 2,
+            y: ((touch.clientY - rect.top) / rect.height - 0.5) * 2,
+        };
+    }, []);
 
     const handleTouchEnd = useCallback(() => {
-        pointerStateRef.current.targetX = 0;
-        pointerStateRef.current.targetY = 0;
-        queuePointerAnimation();
-    }, [queuePointerAnimation]);
+        targetMouse.current = { x: 0, y: 0 };
+    }, []);
 
     const handleCardClick = useCallback((index: number) => {
         setSelectedIndex((prev) => (prev === index ? null : index));
@@ -166,6 +97,9 @@ export function ParallaxCards({
     const handleBackdropClick = useCallback(() => {
         setSelectedIndex(null);
     }, []);
+
+    // Card scale factor on mobile
+    const cardScale = isMobile ? 0.55 : 1;
 
     return (
         <section
@@ -203,25 +137,38 @@ export function ParallaxCards({
             {/* 3D Scene */}
             <div
                 className="relative z-30 flex h-full w-full items-center justify-center"
-                style={{ perspective: `${perspective}px` }}
+                style={{
+                    containerType: "size",
+                    perspective: `${perspective}px`,
+                }}
             >
                 <div
-                    ref={sceneRef}
                     className="relative h-full w-full"
                     style={{
                         transformStyle: "preserve-3d",
+                        transform: `rotateY(${mouse.x * effectiveSensitivity * 0.8}deg) rotateX(${-mouse.y * effectiveSensitivity * 0.8}deg)`,
                     }}
                 >
                     {images.map((src, index) => {
                         const pos = cardPositions[index];
                         const isSelected = selectedIndex === index;
+                        const anotherIsSelected = selectedIndex !== null && selectedIndex !== index;
+
+                        const parallaxX = mouse.x * pos.z * effectiveSensitivity * 40;
+                        const parallaxY = mouse.y * pos.z * effectiveSensitivity * 40;
+                        const zTranslate = pos.z * -400;
+
+                        const fogOpacity = enableDepthFog ? 1 - pos.z * 0.5 * fogIntensity : 1;
+                        const fogBlur = enableDepthFog ? pos.z * 2 * fogIntensity : 0;
+
+                        const finalOpacity = anotherIsSelected ? 0.25 : fogOpacity;
+                        const finalScale = isSelected
+                            ? (isMobile ? 1.4 : 1.8)
+                            : anotherIsSelected ? 0.85 : 1;
 
                         return (
                             <div
                                 key={src}
-                                ref={(node) => {
-                                    cardRefs.current[index] = node;
-                                }}
                                 className="absolute left-1/2 top-1/2 cursor-pointer"
                                 onClick={(event) => {
                                     event.stopPropagation();
@@ -239,11 +186,16 @@ export function ParallaxCards({
                                 style={{
                                     width: `${pos.w * cardScale}px`,
                                     height: `${pos.h * cardScale}px`,
+                                    transform: isSelected
+                                        ? `translate(-50%, -50%) translate3d(0px, 0px, 200px) rotate(0deg) scale(${finalScale})`
+                                        : `translate(-50%, -50%) translate3d(calc(${pos.x}cqw + ${parallaxX}px), calc(${pos.y}cqh + ${parallaxY}px), ${zTranslate}px) rotate(${pos.rotate}deg) scale(${finalScale})`,
+                                    opacity: finalOpacity,
+                                    filter: fogBlur > 0 && !isSelected ? `blur(${fogBlur}px)` : "none",
                                     transformStyle: "preserve-3d",
+                                    zIndex: isSelected ? 50 : Math.round((1 - pos.z) * 10),
                                     transition: isSelected
                                         ? "transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.4s ease, z-index 0s"
                                         : "transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.4s ease, z-index 0s 0.6s",
-                                    willChange: "transform, opacity",
                                 }}
                             >
                                 <div
