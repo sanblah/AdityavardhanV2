@@ -48,6 +48,7 @@
 /* Smooth scroll for soft page transitions */
 html {
   scroll-behavior: smooth;
+  zoom: 90%;
 }
 
 body {

@@ -1,22 +1,65 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 export function VideoBackground() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [transform, setTransform] = useState({ x: 0, y: 0 });
+    const motionLayerRef = useRef<HTMLDivElement>(null);
     const isMobile = useIsMobile();
+    const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+    const [isVideoReady, setIsVideoReady] = useState(false);
     const LOOP_START = 0;
     const LOOP_END = 14.5;
 
-    // Video loop logic
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        let timeoutId: ReturnType<typeof setTimeout> | null = null;
+        let observer: IntersectionObserver | null = null;
+
+        const scheduleVideoLoad = () => {
+            timeoutId = setTimeout(() => {
+                setShouldLoadVideo(true);
+            }, isMobile ? 1200 : 700);
+        };
+
+        observer = new IntersectionObserver(
+            (entries) => {
+                const entry = entries[0];
+                if (!entry?.isIntersecting) return;
+                scheduleVideoLoad();
+                observer?.disconnect();
+            },
+            { threshold: 0.15 }
+        );
+
+        observer.observe(container);
+
+        return () => {
+            observer?.disconnect();
+            if (timeoutId) clearTimeout(timeoutId);
+        };
+    }, [isMobile]);
+
     useEffect(() => {
         const video = videoRef.current;
-        if (!video) return;
+        if (!video || !shouldLoadVideo) return;
 
-        video.volume = 0.15;
+        const playVideo = () => {
+            const playAttempt = video.play();
+            if (!playAttempt) return;
+
+            playAttempt.catch(() => {
+                video.muted = true;
+                void video.play().catch(() => {});
+            });
+        };
+
+        video.volume = 0;
         video.currentTime = LOOP_START;
 
         const handleTimeUpdate = () => {
@@ -25,79 +68,128 @@ export function VideoBackground() {
             }
         };
 
-        video.addEventListener("timeupdate", handleTimeUpdate);
+        const handleLoadedData = () => {
+            setIsVideoReady(true);
+            playVideo();
+        };
 
-        video.play().catch(() => {
-            video.muted = true;
-            video.play();
-        });
+        video.addEventListener("timeupdate", handleTimeUpdate);
+        video.addEventListener("loadeddata", handleLoadedData);
+
+        video.load();
+
+        if (video.readyState >= 2) {
+            handleLoadedData();
+        }
 
         return () => {
             video.removeEventListener("timeupdate", handleTimeUpdate);
+            video.removeEventListener("loadeddata", handleLoadedData);
         };
-    }, []);
+    }, [shouldLoadVideo]);
 
-    // Mouse parallax — desktop only
     useEffect(() => {
-        if (isMobile) return;
+        const layer = motionLayerRef.current;
+        if (!layer) return;
 
-        let rafId: number;
+        if (isMobile) {
+            layer.style.transform = "scale(1.05)";
+            layer.style.willChange = "auto";
+            return;
+        }
+
+        let rafId = 0;
         let targetX = 0;
         let targetY = 0;
         let currentX = 0;
         let currentY = 0;
 
-        const handleMouseMove = (e: MouseEvent) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 2;
-            const y = (e.clientY / window.innerHeight - 0.5) * 2;
-            targetX = x * 30;
-            targetY = y * 20;
+        const applyTransform = () => {
+            layer.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) scale(1.15)`;
+            layer.style.willChange = "transform";
         };
 
         const animate = () => {
-            currentX += (targetX - currentX) * 0.06;
-            currentY += (targetY - currentY) * 0.06;
-            setTransform({ x: currentX, y: currentY });
-            rafId = requestAnimationFrame(animate);
+            currentX += (targetX - currentX) * 0.08;
+            currentY += (targetY - currentY) * 0.08;
+            applyTransform();
+
+            const deltaX = Math.abs(targetX - currentX);
+            const deltaY = Math.abs(targetY - currentY);
+            if (deltaX > 0.1 || deltaY > 0.1) {
+                rafId = window.requestAnimationFrame(animate);
+                return;
+            }
+
+            currentX = targetX;
+            currentY = targetY;
+            applyTransform();
+            rafId = 0;
         };
 
+        const queueAnimation = () => {
+            if (rafId !== 0) return;
+            rafId = window.requestAnimationFrame(animate);
+        };
+
+        const handleMouseMove = (event: MouseEvent) => {
+            const x = (event.clientX / window.innerWidth - 0.5) * 2;
+            const y = (event.clientY / window.innerHeight - 0.5) * 2;
+            targetX = x * 30;
+            targetY = y * 20;
+            queueAnimation();
+        };
+
+        const handleMouseLeave = () => {
+            targetX = 0;
+            targetY = 0;
+            queueAnimation();
+        };
+
+        applyTransform();
+
         window.addEventListener("mousemove", handleMouseMove);
-        rafId = requestAnimationFrame(animate);
+        window.addEventListener("mouseleave", handleMouseLeave);
 
         return () => {
             window.removeEventListener("mousemove", handleMouseMove);
-            cancelAnimationFrame(rafId);
+            window.removeEventListener("mouseleave", handleMouseLeave);
+            if (rafId !== 0) {
+                window.cancelAnimationFrame(rafId);
+            }
         };
     }, [isMobile]);
 
     return (
         <div ref={containerRef} className="fixed inset-0 z-0 overflow-hidden">
             <div
-                style={
-                    isMobile
-                        ? {
-                              transform: "scale(1.05)",
-                              willChange: "auto",
-                          }
-                        : {
-                              transform: `translate3d(${transform.x}px, ${transform.y}px, 0) scale(1.15)`,
-                              willChange: "transform",
-                              transition: "none",
-                          }
-                }
+                ref={motionLayerRef}
                 className={
                     isMobile
                         ? "absolute inset-[-2%] h-[104%] w-[104%]"
                         : "absolute inset-[-8%] h-[116%] w-[116%]"
                 }
             >
+                <Image
+                    src="/images/hero/hero-video-poster.jpg"
+                    alt=""
+                    fill
+                    priority
+                    aria-hidden="true"
+                    className={`object-cover transition-opacity duration-700 ${isVideoReady ? "opacity-0" : "opacity-100"}`}
+                    sizes="100vw"
+                />
                 <video
                     ref={videoRef}
                     playsInline
                     muted
-                    className="h-full w-full object-cover"
+                    preload="none"
+                    poster="/images/hero/hero-video-poster.jpg"
+                    className={`h-full w-full object-cover transition-opacity duration-700 ${isVideoReady ? "opacity-100" : "opacity-0"}`}
                 >
-                    <source src="/videos/hero-video.mp4" type="video/mp4" />
+                    {shouldLoadVideo ? (
+                        <source src="/videos/hero-video-optimized.mp4" type="video/mp4" />
+                    ) : null}
                 </video>
             </div>
             {/* Soft overlay */}

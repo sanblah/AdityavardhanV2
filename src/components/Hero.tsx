@@ -26,9 +26,9 @@ export function Hero() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-                    className="mt-8 max-w-xl text-sm font-demi uppercase tracking-[0.25em] text-brand-white/70 md:text-base"
+                    className="mt-8 max-w-2xl text-sm font-book leading-relaxed tracking-[0.08em] text-brand-white/75 md:text-base"
                 >
-                    Where timeless elegance meets contemporary design
+                    handcrafting lifelong relationships, one personalised ensemble at a time
                 </motion.p>
 
                 {/* Scroll Indicator */}

@@ -1,0 +1,6 @@
+# RFC 9116 — Security Disclosure Policy
+# https://securitytxt.org/
+
+Contact: mailto:security@adityavardhan.com
+Preferred-Languages: en
+Expires: 2027-01-01T00:00:00.000Z

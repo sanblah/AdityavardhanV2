@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "verify:homepage": "node execution/verify-homepage-performance.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -14,7 +15,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^11.15.0",
     "gsap": "^3.14.2",
-    "next": "15.1.11",
+    "next": "16.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^2.6.0"
@@ -25,7 +26,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.1.0",
+    "eslint-config-next": "16.1.6",
     "tailwindcss": "^4.0.0",
     "typescript": "^5"
   }

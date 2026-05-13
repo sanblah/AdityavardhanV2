@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { BrandStory } from "@/components/about/BrandStory";
 import { FounderVision } from "@/components/about/FounderVision";
 import { ParallaxImage } from "@/components/shared/ParallaxImage";

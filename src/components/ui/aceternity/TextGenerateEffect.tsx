@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { motion, stagger, useAnimate, useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -19,19 +19,19 @@ export function TextGenerateEffect({
 }: TextGenerateEffectProps) {
     const [scope, animate] = useAnimate();
     const isInView = useInView(scope, { once: true, margin: "-100px" });
-    const [hasAnimated, setHasAnimated] = useState(false);
+    const hasAnimated = useRef(false);
     const wordsArray = words.split(" ");
 
     useEffect(() => {
-        if (isInView && !hasAnimated) {
-            animate(
-                "span",
-                { opacity: 1, filter: filter ? "blur(0px)" : "none" },
-                { duration, delay: stagger(0.08) }
-            );
-            setHasAnimated(true);
-        }
-    }, [isInView, hasAnimated, animate, duration, filter]);
+        if (!isInView || hasAnimated.current) return;
+
+        hasAnimated.current = true;
+        animate(
+            "span",
+            { opacity: 1, filter: filter ? "blur(0px)" : "none" },
+            { duration, delay: stagger(0.08) }
+        );
+    }, [isInView, animate, duration, filter]);
 
     return (
         <div ref={scope} className={cn(className)}>

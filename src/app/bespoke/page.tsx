@@ -1,10 +1,11 @@
 import { ParallaxImage } from "@/components/shared/ParallaxImage";
+import { WhyBespoke } from "@/components/bespoke/WhyBespoke";
 import { ProcessTimeline } from "@/components/bespoke/ProcessTimeline";
 import { Testimonials } from "@/components/bespoke/Testimonials";
 
 export const metadata = {
-    title: "Bespoke Experience | Premium Fashion Atelier",
-    description: "Discover the five-step bespoke tailoring journey at our atelier.",
+    title: "Bespoke Experience | ADITYAVARDHAN",
+    description: "Discover the personalised journey of crafting an ensemble just for you at Adityavardhan.",
 };
 
 export default function BespokePage() {
@@ -20,18 +21,19 @@ export default function BespokePage() {
                 />
                 <div className="absolute inset-0 bg-brand-black/50" />
                 <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
-                    <p className="font-heading text-xs uppercase tracking-[0.4em] text-brand-gold">
-                        Five Steps to Perfection
+                    <p className="font-heading text-xs tracking-[0.4em] text-brand-gold">
+                        A Garment Made for One
                     </p>
-                    <h1 className="mt-4 font-logo text-[clamp(2rem,8vw,5rem)] uppercase tracking-[0.15em] text-brand-white">
+                    <h1 className="mt-4 font-logo text-[clamp(2rem,8vw,5rem)] tracking-[0.12em] text-brand-white">
                         The Bespoke Experience
                     </h1>
-                    <p className="mt-6 max-w-lg font-body text-sm font-book leading-relaxed text-brand-white/60">
-                        From the first consultation to the final stitch, every step is a dialogue between your vision and our craft.
+                    <p className="mt-6 max-w-3xl font-body text-sm font-book leading-relaxed text-brand-white/65 md:text-base">
+                        A bespoke Adityavardhan piece is not selected &mdash; it is composed. From the first consultation to the final stitch, every garment is a quiet dialogue between your vision and the hands that bring it to life.
                     </p>
                 </div>
             </section>
 
+            <WhyBespoke />
             <ProcessTimeline />
             <Testimonials />
         </main>

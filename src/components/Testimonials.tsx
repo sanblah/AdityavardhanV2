@@ -3,7 +3,6 @@
 import { useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { DrawLineLink } from "./DrawLineLink";
-import { BrandLogo } from "./BrandLogo";
 
 const testimonials = [
     {
@@ -165,11 +164,8 @@ export function Testimonials() {
                         </span>
                     </DrawLineLink>
                     <p className="mx-auto mt-6 max-w-2xl font-heading text-xl font-bold leading-relaxed text-brand-white md:mt-8 md:text-2xl lg:text-4xl">
-                        Words from those who&apos;ve experienced
+                        The love that keeps us going
                     </p>
-                    <div className="mt-4 flex justify-center">
-                        <BrandLogo className="h-auto w-[min(78vw,520px)]" alt="Brand logo" />
-                    </div>
                 </motion.div>
 
                 {/* 3D Testimonial Cards */}

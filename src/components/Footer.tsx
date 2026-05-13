@@ -42,12 +42,11 @@ export function Footer() {
                         <h2 className="font-heading text-sm uppercase tracking-[0.4em] text-brand-gold">
                             Get in Touch
                         </h2>
-                        <p className="mt-6 font-heading text-3xl font-bold uppercase tracking-[0.1em] text-brand-white md:text-4xl lg:text-6xl">
-                            Let&apos;s Create Together
+                        <p className="mt-6 font-heading text-3xl font-bold tracking-[0.06em] text-brand-white md:text-4xl lg:text-6xl">
+                            Let&apos;s Make Your Dreams Come True
                         </p>
                         <p className="mx-auto mt-6 max-w-lg text-brand-white/60">
-                            Ready to elevate your style? Reach out to discover our bespoke services
-                            and exclusive collections.
+                            Reach out to begin your bespoke journey
                         </p>
 
                         <motion.div
@@ -106,10 +105,8 @@ export function Footer() {
                     </div>
 
                     {/* Copyright */}
-                    <div className="flex items-center gap-2 font-body text-xs text-brand-white/30">
-                        <span>&copy; {new Date().getFullYear()}</span>
-                        <BrandLogo className="h-auto w-[95px] opacity-80" alt="Brand logo" />
-                        <span>All rights reserved.</span>
+                    <div className="font-body text-xs text-brand-white/30">
+                        &copy; {new Date().getFullYear()} AdityaVardhan. All rights reserved.
                     </div>
                 </div>
             </div>

@@ -10,35 +10,35 @@ const steps = [
         number: "01",
         title: "Consultation",
         description:
-            "We begin with a personal consultation to understand your style, occasion, and vision. Together we define the garment that will become uniquely yours.",
+            "Every commission begins with an unhurried conversation. We learn the occasion, the silhouettes you favour, and the cultural and personal taste that move you. Together we shape the brief from colour and cut to embroidery and mood. This will guide every sketch, every cut and every hand involved in your garment.",
         image: "/images/parallax/parallax-16.jpg",
     },
     {
         number: "02",
-        title: "Fabric Selection",
+        title: "Fabric & Embellishment Selection",
         description:
-            "Explore our curated selection of the world's finest fabrics — from Italian superfine wools to rare silks. Each chosen for its drape, texture, and character.",
+            "We curate fabrics drawn from the world's most exacting makers; Italian superfine wools, English worsteds, handwoven Banarasi silks, rare brocades and tissues. For ceremonial pieces, we develop a bespoke sketch in collaboration with you, and personally select embroidery palette and elements: zardozi, aari, dabka, resham, sequin, and pearl, each sampled by hand on the chosen cloth before a single thread is committed to the final garment.",
         image: "/images/parallax/parallax-9.jpg",
     },
     {
         number: "03",
-        title: "Measurements",
+        title: "Measurements & Pattern Drafting",
         description:
-            "Our master tailors take over 30 precise measurements, capturing every nuance of your form. This blueprint ensures a fit that feels as natural as your own skin.",
+            "Our master tailors take over thirty measurements, recording posture, stance, and the small asymmetries every body carries that no standard size can accommodate. From these, a paper pattern is drafted from scratch, a blueprint that exists for you alone, preserved in our archive for every future commission, growing with you.",
         image: "/images/edited/edited-5.jpg",
     },
     {
         number: "04",
-        title: "Fitting Sessions",
+        title: "Fittings",
         description:
-            "Through multiple fittings, we refine the garment on your body. Every adjustment is deliberate — the slope of a shoulder, the break of a trouser, the ease of movement.",
+            "A bespoke garment is sculpted, not sewn once. Across multiple fittings, first in muslin, then in cloth, we refine the slope of a shoulder, the break of a trouser, the rise of a collar, the exact ease of a sherwani across the chest. Hand embroidery is layered onto the panels only after the foundation fits perfectly, so that not a single motif is wasted.",
         image: "/images/parallax/parallax-11.jpg",
     },
     {
         number: "05",
-        title: "Final Delivery",
+        title: "Hand Finishing & Delivery",
         description:
-            "Your finished garment is presented in our signature packaging. The result: a piece that tells your story, crafted with the precision and care it deserves.",
+            "The final hours of any Adityavardhan piece belong to the finishers; artisans who pick-stitch lapels, hand-bind buttonholes, set linings invisibly, and press the garment into its final form. It is then presented in our signature packaging, accompanied by a care guide and a record of the hands that built it: a piece that does not merely fit you, but belongs to you.",
         image: "/images/group/group-5.jpg",
     },
 ];
@@ -135,6 +135,15 @@ export function ProcessTimeline() {
                 ref={panelRef}
                 className="relative flex h-screen items-center overflow-hidden"
             >
+                <div className="absolute left-0 right-0 top-10 z-10 px-6 text-center md:top-14">
+                    <p className="font-heading text-xs tracking-[0.4em] text-brand-gold">
+                        Steps to the Perfect You
+                    </p>
+                    <h2 className="mt-3 font-heading text-2xl font-bold tracking-[0.08em] text-brand-white md:text-4xl">
+                        From Vision to Heirloom
+                    </h2>
+                </div>
+
                 {/* Gold progress line */}
                 <div className="absolute left-6 top-[15%] h-[70%] w-[1px] bg-brand-white/10 md:left-12">
                     <div className="progress-line-fill h-full w-full origin-top bg-brand-gold" />
@@ -147,21 +156,21 @@ export function ProcessTimeline() {
                         className="timeline-step absolute inset-0 flex items-center px-6 md:px-12"
                         style={{ opacity: i === 0 ? 1 : 0 }}
                     >
-                        <div className="mx-auto grid h-full max-h-screen w-full max-w-6xl items-center gap-6 overflow-hidden py-8 md:gap-12 md:grid-cols-2 md:py-12">
+                        <div className="mx-auto grid h-full max-h-screen w-full max-w-6xl items-center gap-5 overflow-hidden pb-8 pt-28 md:gap-12 md:grid-cols-2 md:py-12">
                             {/* Text */}
                             <div className="pl-8 md:pl-16">
                                 <span className="font-heading text-4xl font-bold text-brand-gold/20 md:text-6xl lg:text-8xl">
                                     {step.number}
                                 </span>
-                                <h3 className="mt-3 font-heading text-xl font-bold uppercase tracking-[0.1em] text-brand-white md:mt-4 md:text-2xl lg:text-4xl">
+                                <h3 className="mt-3 font-heading text-lg font-bold tracking-[0.08em] text-brand-white md:mt-4 md:text-2xl lg:text-4xl">
                                     {step.title}
                                 </h3>
-                                <p className="mt-4 max-w-md font-body text-sm font-book leading-relaxed text-brand-white/60 md:mt-6 md:text-base">
+                                <p className="mt-4 max-w-xl font-body text-[13px] font-book leading-relaxed text-brand-white/60 md:mt-6 md:text-base">
                                     {step.description}
                                 </p>
                             </div>
                             {/* Image */}
-                            <div className="relative aspect-[3/4] max-h-[40vh] overflow-hidden rounded-sm md:max-h-[60vh]">
+                            <div className="relative aspect-[3/4] max-h-[24vh] overflow-hidden rounded-sm md:max-h-[60vh]">
                                 <Image
                                     src={step.image}
                                     alt={step.title}

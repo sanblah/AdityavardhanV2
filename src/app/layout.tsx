@@ -20,6 +20,7 @@ const avantGarde = localFont({
     ],
     variable: "--font-avant-garde",
     display: "swap",
+    preload: false,
 });
 
 export const metadata: Metadata = {

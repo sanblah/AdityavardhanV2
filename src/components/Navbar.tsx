@@ -28,10 +28,7 @@ export function Navbar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    // Close mobile menu on route change
-    useEffect(() => {
-        setIsOpen(false);
-    }, [pathname]);
+    const closeMobileMenu = () => setIsOpen(false);
 
     return (
         <>
@@ -52,6 +49,7 @@ export function Navbar() {
                         href="/"
                         className="transition-opacity hover:opacity-80"
                         aria-label="Home"
+                        onClick={closeMobileMenu}
                     >
                         <BrandLogo
                             className="h-auto w-[180px] md:w-[220px]"
@@ -126,6 +124,7 @@ export function Navbar() {
                                 >
                                     <Link
                                         href={item.href}
+                                        onClick={closeMobileMenu}
                                         className={`font-heading text-2xl font-book uppercase tracking-[0.3em] transition-colors hover:text-brand-gold ${
                                             pathname === item.href
                                                 ? "text-brand-gold"

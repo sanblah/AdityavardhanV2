@@ -27,6 +27,7 @@ export function DetailsForm({ onSubmit }: DetailsFormProps) {
                     onSubmit={handleSubmit}
                     className="mx-auto max-w-lg space-y-8"
                 >
+                    {/* ASVS 5.1.3 — Input length limits prevent DoS and truncation attacks */}
                     <div>
                         <label className="block font-heading text-xs uppercase tracking-[0.2em] text-brand-white/50">
                             Full Name
@@ -34,39 +35,54 @@ export function DetailsForm({ onSubmit }: DetailsFormProps) {
                         <input
                             type="text"
                             required
+                            minLength={2}
+                            maxLength={100}
+                            autoComplete="name"
+                            spellCheck={false}
                             className="mt-2 w-full border-b border-brand-white/20 bg-transparent pb-3 font-body text-base text-brand-white outline-none transition-colors focus:border-brand-gold"
                             placeholder="Your full name"
                         />
                     </div>
                     <div>
                         <label className="block font-heading text-xs uppercase tracking-[0.2em] text-brand-white/50">
-                            Email
+                            Email Address
                         </label>
                         <input
                             type="email"
                             required
+                            maxLength={254}         /* RFC 5321 maximum email length */
+                            autoComplete="email"
+                            inputMode="email"
+                            spellCheck={false}
                             className="mt-2 w-full border-b border-brand-white/20 bg-transparent pb-3 font-body text-base text-brand-white outline-none transition-colors focus:border-brand-gold"
                             placeholder="your@email.com"
                         />
                     </div>
                     <div>
                         <label className="block font-heading text-xs uppercase tracking-[0.2em] text-brand-white/50">
-                            Phone
+                            Phone Number
                         </label>
                         <input
                             type="tel"
+                            maxLength={20}
+                            autoComplete="tel"
+                            inputMode="tel"
+                            pattern="^[+\d\s\-().]{7,20}$"
+                            title="Enter a valid phone number (digits, spaces, +, -, parentheses)"
                             className="mt-2 w-full border-b border-brand-white/20 bg-transparent pb-3 font-body text-base text-brand-white outline-none transition-colors focus:border-brand-gold"
                             placeholder="+91 XXXXX XXXXX"
                         />
                     </div>
                     <div>
                         <label className="block font-heading text-xs uppercase tracking-[0.2em] text-brand-white/50">
-                            Preferences & Requests
+                            Special Requests / Notes
                         </label>
                         <textarea
                             rows={3}
+                            maxLength={500}
+                            autoComplete="off"
                             className="mt-2 w-full resize-none border-b border-brand-white/20 bg-transparent pb-3 font-body text-base text-brand-white outline-none transition-colors focus:border-brand-gold"
-                            placeholder="Tell us about your vision..."
+                            placeholder="Any specific requirements or preferences..."
                         />
                     </div>
 
@@ -74,7 +90,7 @@ export function DetailsForm({ onSubmit }: DetailsFormProps) {
                         type="submit"
                         className="mt-4 w-full border border-brand-gold bg-transparent py-4 font-heading text-xs uppercase tracking-[0.25em] text-brand-gold transition-all duration-500 hover:bg-brand-gold hover:text-brand-black"
                     >
-                        Confirm Appointment
+                        Request Appointment
                     </button>
                 </motion.form>
             ) : (
