@@ -20,7 +20,7 @@ export function TextGenerateEffect({
     const [scope, animate] = useAnimate();
     const isInView = useInView(scope, { once: true, margin: "-100px" });
     const hasAnimated = useRef(false);
-    const wordsArray = words.split(" ");
+    const textTokens = words.split(/(\s+)/);
 
     useEffect(() => {
         if (!isInView || hasAnimated.current) return;
@@ -35,18 +35,24 @@ export function TextGenerateEffect({
 
     return (
         <div ref={scope} className={cn(className)}>
-            {wordsArray.map((word, idx) => (
-                <motion.span
-                    key={word + idx}
-                    className="mr-[0.28em] inline-block last:mr-0"
-                    style={{
-                        opacity: 0,
-                        filter: filter ? "blur(10px)" : "none",
-                    }}
-                >
-                    {word}
-                </motion.span>
-            ))}
+            {textTokens.map((token, idx) => {
+                if (/^\s+$/.test(token)) {
+                    return token;
+                }
+
+                return (
+                    <motion.span
+                        key={token + idx}
+                        className="inline-block"
+                        style={{
+                            opacity: 0,
+                            filter: filter ? "blur(10px)" : "none",
+                        }}
+                    >
+                        {token}
+                    </motion.span>
+                );
+            })}
         </div>
     );
 }
