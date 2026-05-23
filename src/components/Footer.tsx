@@ -27,44 +27,44 @@ export function Footer() {
     return (
         <footer className="relative z-20 overflow-hidden bg-brand-black">
             {/* CTA Section */}
-            <div className="relative flex min-h-[60vh] flex-col justify-center border-t border-brand-gold/20 py-12 md:min-h-[85vh] md:py-20">
-                    {/* Ambient Glow */}
-                    <div className="pointer-events-none absolute inset-0">
-                        <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-gold/5 blur-[150px] md:h-[500px] md:w-[500px]" />
-                    </div>
+            <div className="relative flex min-h-[52svh] flex-col justify-center border-t border-brand-gold/20 py-14 md:min-h-[85vh] md:py-20">
+                {/* Ambient Glow */}
+                <div className="pointer-events-none absolute inset-0">
+                    <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-gold/5 blur-[150px] md:h-[500px] md:w-[500px]" />
+                </div>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="relative z-10 mx-auto max-w-4xl px-6 text-center"
+                >
+                    <h2 className="font-heading text-sm uppercase tracking-[0.4em] text-brand-gold">
+                        Get in Touch
+                    </h2>
+                    <p className="mt-6 text-balance font-heading text-3xl font-bold tracking-[0.04em] text-brand-white md:text-4xl md:tracking-[0.06em] lg:text-6xl">
+                        Let&apos;s Make Your Dreams Come True
+                    </p>
+                    <p className="mx-auto mt-6 max-w-lg text-brand-white/60">
+                        Reach out to begin your bespoke journey
+                    </p>
 
                     <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="relative z-10 mx-auto max-w-4xl px-6 text-center"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="mt-10 inline-block"
                     >
-                        <h2 className="font-heading text-sm uppercase tracking-[0.4em] text-brand-gold">
-                            Get in Touch
-                        </h2>
-                        <p className="mt-6 font-heading text-3xl font-bold tracking-[0.06em] text-brand-white md:text-4xl lg:text-6xl">
-                            Let&apos;s Make Your Dreams Come True
-                        </p>
-                        <p className="mx-auto mt-6 max-w-lg text-brand-white/60">
-                            Reach out to begin your bespoke journey
-                        </p>
-
-                        <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="mt-10 inline-block"
+                        <Link
+                            href="/appointment"
+                            className="inline-flex min-h-12 max-w-full items-center justify-center gap-3 rounded-full border border-brand-gold bg-transparent px-6 py-4 text-center font-heading text-xs uppercase tracking-[0.16em] text-brand-gold transition-all duration-300 hover:bg-brand-gold hover:text-brand-black md:px-8 md:text-sm md:tracking-[0.2em]"
                         >
-                            <Link
-                                href="/appointment"
-                                className="inline-flex items-center gap-3 rounded-full border border-brand-gold bg-transparent px-8 py-4 font-heading text-sm uppercase tracking-[0.2em] text-brand-gold transition-all duration-300 hover:bg-brand-gold hover:text-brand-black"
-                            >
-                                <span>Book Appointment</span>
-                                <span className="text-lg">&rarr;</span>
-                            </Link>
-                        </motion.div>
+                            <span>Book Appointment</span>
+                            <span className="text-lg">&rarr;</span>
+                        </Link>
                     </motion.div>
-                </div>
+                </motion.div>
+            </div>
 
             {/* Footer Bottom */}
             <div className="border-t border-brand-gold/10 bg-brand-black px-6 py-8">
