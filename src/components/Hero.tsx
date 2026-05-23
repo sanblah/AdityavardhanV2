@@ -5,9 +5,12 @@ import { BrandLogo } from "./BrandLogo";
 
 export function Hero() {
     return (
-        <section className="relative z-10 h-screen w-full">
+        <section className="relative z-10 min-h-[100svh] w-full md:min-h-screen">
             {/* Content - no video here, uses fixed background */}
-            <div className="flex h-full flex-col items-center justify-center px-6 text-center">
+            <div
+                className="flex min-h-[100svh] flex-col items-center justify-center px-5 pb-16 pt-24 text-center md:min-h-screen md:px-6"
+                style={{ paddingTop: "calc(6rem + var(--safe-top))" }}
+            >
                 {/* Animated Brand Name */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -27,7 +30,7 @@ export function Hero() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-                    className="mt-8 max-w-2xl text-sm font-book leading-relaxed tracking-[0.08em] text-brand-white/75 md:text-base"
+                    className="mt-6 max-w-[22rem] text-balance text-sm font-book leading-relaxed tracking-[0.06em] text-brand-white/75 md:mt-8 md:max-w-2xl md:text-base md:tracking-[0.08em]"
                 >
                     handcrafting lifelong relationships, one personalised ensemble at a time
                 </motion.p>

@@ -12,7 +12,7 @@ export default function BespokePage() {
     return (
         <main className="relative">
             {/* Hero */}
-            <section className="relative h-screen w-full overflow-hidden">
+            <section className="relative min-h-[100svh] w-full overflow-hidden md:h-screen">
                 <ParallaxImage
                     src="/images/parallax/parallax-3.jpg"
                     alt="The Bespoke Experience"
@@ -20,7 +20,10 @@ export default function BespokePage() {
                     speed={0.2}
                 />
                 <div className="absolute inset-0 bg-brand-black/50" />
-                <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
+                <div
+                    className="relative z-10 flex min-h-[100svh] flex-col items-center justify-center px-5 pb-16 pt-24 text-center md:h-full md:px-6"
+                    style={{ paddingTop: "calc(6rem + var(--safe-top))" }}
+                >
                     <p className="font-heading text-xs tracking-[0.4em] text-brand-gold">
                         A Garment Made for One
                     </p>

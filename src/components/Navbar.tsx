@@ -27,6 +27,38 @@ export function Navbar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const previousOverflow = document.body.style.overflow;
+        const backgroundElements = Array.from(
+            document.querySelectorAll<HTMLElement>("main, footer")
+        );
+        const previousBackgroundState = backgroundElements.map((element) => ({
+            element,
+            ariaHidden: element.getAttribute("aria-hidden"),
+            inert: element.inert,
+        }));
+
+        document.body.style.overflow = "hidden";
+        backgroundElements.forEach((element) => {
+            element.setAttribute("aria-hidden", "true");
+            element.inert = true;
+        });
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            previousBackgroundState.forEach(({ element, ariaHidden, inert }) => {
+                if (ariaHidden === null) {
+                    element.removeAttribute("aria-hidden");
+                } else {
+                    element.setAttribute("aria-hidden", ariaHidden);
+                }
+                element.inert = inert;
+            });
+        };
+    }, [isOpen]);
+
     const closeMobileMenu = () => setIsOpen(false);
 
     const handleNavClick = () => {
@@ -87,8 +119,10 @@ export function Navbar() {
                     {/* Mobile Toggle */}
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="relative z-50 flex h-10 w-10 items-center justify-center md:hidden"
+                        className="relative z-50 flex h-11 w-11 items-center justify-center md:hidden"
                         aria-label="Toggle menu"
+                        aria-expanded={isOpen}
+                        aria-controls="mobile-navigation"
                     >
                         <div className="flex flex-col gap-1.5">
                             <motion.span
@@ -112,13 +146,22 @@ export function Navbar() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
+                        id="mobile-navigation-panel"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed inset-0 z-40 flex items-center justify-center bg-brand-black/60 backdrop-blur-2xl md:hidden"
+                        className="fixed inset-0 z-40 flex min-h-[100dvh] items-center justify-center bg-brand-black/90 px-6 backdrop-blur-2xl md:hidden"
+                        style={{
+                            paddingTop: "calc(5rem + var(--safe-top))",
+                            paddingBottom: "calc(2rem + var(--safe-bottom))",
+                        }}
                     >
-                        <nav className="flex flex-col items-center gap-8">
+                        <nav
+                            id="mobile-navigation"
+                            aria-label="Mobile navigation"
+                            className="flex w-full max-w-sm flex-col items-center gap-6"
+                        >
                             {navItems.map((item, index) => (
                                 <motion.div
                                     key={item.name}
@@ -131,7 +174,7 @@ export function Navbar() {
                                         href={item.href}
                                         scroll
                                         onClick={handleNavClick}
-                                        className={`font-heading text-2xl font-book uppercase tracking-[0.3em] transition-colors hover:text-brand-gold ${
+                                        className={`min-h-12 text-center font-heading text-xl font-book uppercase leading-relaxed tracking-[0.22em] transition-colors hover:text-brand-gold ${
                                             pathname === item.href
                                                 ? "text-brand-gold"
                                                 : "text-brand-white"

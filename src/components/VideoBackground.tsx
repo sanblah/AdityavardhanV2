@@ -3,18 +3,24 @@
 import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 export function VideoBackground() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const motionLayerRef = useRef<HTMLDivElement>(null);
     const isMobile = useIsMobile();
+    const prefersReducedMotion = usePrefersReducedMotion();
+    const shouldUsePosterOnly = isMobile || prefersReducedMotion;
     const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
     const [isVideoReady, setIsVideoReady] = useState(false);
+    const isVideoVisible = !shouldUsePosterOnly && isVideoReady;
     const LOOP_START = 0;
     const LOOP_END = 14.5;
 
     useEffect(() => {
+        if (shouldUsePosterOnly) return;
+
         const container = containerRef.current;
         if (!container) return;
 
@@ -43,9 +49,11 @@ export function VideoBackground() {
             observer?.disconnect();
             if (timeoutId) clearTimeout(timeoutId);
         };
-    }, [isMobile]);
+    }, [isMobile, shouldUsePosterOnly]);
 
     useEffect(() => {
+        if (shouldUsePosterOnly) return;
+
         const video = videoRef.current;
         if (!video || !shouldLoadVideo) return;
 
@@ -86,7 +94,7 @@ export function VideoBackground() {
             video.removeEventListener("timeupdate", handleTimeUpdate);
             video.removeEventListener("loadeddata", handleLoadedData);
         };
-    }, [shouldLoadVideo]);
+    }, [shouldLoadVideo, shouldUsePosterOnly]);
 
     useEffect(() => {
         const layer = motionLayerRef.current;
@@ -176,7 +184,7 @@ export function VideoBackground() {
                     fill
                     priority
                     aria-hidden="true"
-                    className={`object-cover transition-opacity duration-700 ${isVideoReady ? "opacity-0" : "opacity-100"}`}
+                    className={`object-cover transition-opacity duration-700 ${isVideoVisible ? "opacity-0" : "opacity-100"}`}
                     sizes="100vw"
                 />
                 <video
@@ -185,9 +193,9 @@ export function VideoBackground() {
                     muted
                     preload="none"
                     poster="/images/hero/hero-video-poster.jpg"
-                    className={`h-full w-full object-cover transition-opacity duration-700 ${isVideoReady ? "opacity-100" : "opacity-0"}`}
+                    className={`h-full w-full object-cover transition-opacity duration-700 ${isVideoVisible ? "opacity-100" : "opacity-0"}`}
                 >
-                    {shouldLoadVideo ? (
+                    {!shouldUsePosterOnly && shouldLoadVideo ? (
                         <source src="/videos/hero-video-optimized.mp4" type="video/mp4" />
                     ) : null}
                 </video>
