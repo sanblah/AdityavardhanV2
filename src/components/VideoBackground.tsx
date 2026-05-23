@@ -11,7 +11,7 @@ export function VideoBackground() {
     const motionLayerRef = useRef<HTMLDivElement>(null);
     const isMobile = useIsMobile();
     const prefersReducedMotion = usePrefersReducedMotion();
-    const shouldUsePosterOnly = isMobile || prefersReducedMotion;
+    const shouldUsePosterOnly = prefersReducedMotion;
     const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
     const [isVideoReady, setIsVideoReady] = useState(false);
     const isVideoVisible = !shouldUsePosterOnly && isVideoReady;
@@ -63,7 +63,9 @@ export function VideoBackground() {
 
             playAttempt.catch(() => {
                 video.muted = true;
-                void video.play().catch(() => {});
+                void video.play().catch(() => {
+                    setIsVideoReady(false);
+                });
             });
         };
 
@@ -77,12 +79,16 @@ export function VideoBackground() {
         };
 
         const handleLoadedData = () => {
-            setIsVideoReady(true);
             playVideo();
+        };
+
+        const handlePlaying = () => {
+            setIsVideoReady(true);
         };
 
         video.addEventListener("timeupdate", handleTimeUpdate);
         video.addEventListener("loadeddata", handleLoadedData);
+        video.addEventListener("playing", handlePlaying);
 
         video.load();
 
@@ -93,6 +99,7 @@ export function VideoBackground() {
         return () => {
             video.removeEventListener("timeupdate", handleTimeUpdate);
             video.removeEventListener("loadeddata", handleLoadedData);
+            video.removeEventListener("playing", handlePlaying);
         };
     }, [shouldLoadVideo, shouldUsePosterOnly]);
 
@@ -189,10 +196,13 @@ export function VideoBackground() {
                 />
                 <video
                     ref={videoRef}
+                    autoPlay
                     playsInline
                     muted
                     preload="none"
                     poster="/images/hero/hero-video-poster.jpg"
+                    aria-hidden="true"
+                    tabIndex={-1}
                     className={`h-full w-full object-cover transition-opacity duration-700 ${isVideoVisible ? "opacity-100" : "opacity-0"}`}
                 >
                     {!shouldUsePosterOnly && shouldLoadVideo ? (

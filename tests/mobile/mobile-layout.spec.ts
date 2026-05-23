@@ -30,6 +30,24 @@ test.describe("mobile layout", () => {
     await expectNoHorizontalOverflow(page);
   });
 
+  test("homepage background video loads on mobile", async ({ page }) => {
+    await page.goto("/");
+    const heroVideo = page.locator("video").first();
+
+    await expect(heroVideo).toHaveAttribute("playsinline", "");
+    await expect(heroVideo).toHaveAttribute("muted", "");
+    await expect
+      .poll(async () => heroVideo.locator("source").first().getAttribute("src"), {
+        timeout: 3_500,
+      })
+      .toBe("/videos/hero-video-optimized.mp4");
+    await expect
+      .poll(async () => heroVideo.evaluate((video: HTMLVideoElement) => video.currentTime), {
+        timeout: 6_000,
+      })
+      .toBeGreaterThan(0);
+  });
+
   test("homepage lookbook preview opens and closes on backdrop tap", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: /view piece 1 in full/i }).click();
