@@ -17,6 +17,17 @@ const images = [
     "/images/parallax/parallax-13.jpg",
 ];
 
+const imageSizes = [
+    { width: 2560, height: 3838 },
+    { width: 2560, height: 3840 },
+    { width: 2560, height: 3313 },
+    { width: 2560, height: 3838 },
+    { width: 2560, height: 1707 },
+    { width: 2560, height: 3838 },
+    { width: 2560, height: 3838 },
+    { width: 2560, height: 3313 },
+];
+
 // Evenly-spaced 4×2 grid in container-query units. Same z for every card so
 // they sit on one plane (no overlap, no depth jitter). Subtle rotation per
 // card adds character without breaking the symmetry.
@@ -117,6 +128,10 @@ export function ParallaxCards({
         setLightboxIndex(null);
     }, []);
 
+    const selectedImageSize = lightboxIndex === null ? null : imageSizes[lightboxIndex];
+    const selectedImageRatio = selectedImageSize
+        ? selectedImageSize.width / selectedImageSize.height
+        : 1;
     const cardScale = isMobile ? 0.6 : 1;
 
     return (
@@ -240,7 +255,13 @@ export function ParallaxCards({
                             exit={{ scale: 0.96, opacity: 0 }}
                             transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                             onClick={(e) => e.stopPropagation()}
-                            className="relative h-[85vh] w-[90vw] max-w-5xl"
+                            className="relative max-h-[85vh] max-w-[90vw]"
+                            style={{
+                                aspectRatio: selectedImageSize
+                                    ? `${selectedImageSize.width} / ${selectedImageSize.height}`
+                                    : undefined,
+                                width: `min(90vw, calc(85vh * ${selectedImageRatio}))`,
+                            }}
                         >
                             <Image
                                 src={images[lightboxIndex]}
