@@ -115,7 +115,7 @@ export function LookbookGallery() {
     return (
         <section className="bg-brand-black pb-24 pt-10 md:pb-32">
             <div className="mx-auto max-w-7xl px-6 md:px-12">
-                <div className="flex flex-wrap justify-center gap-3">
+                <div className="-mx-6 flex snap-x gap-3 overflow-x-auto px-6 pb-2 md:mx-0 md:flex-wrap md:justify-center md:overflow-visible md:px-0 md:pb-0">
                     {filters.map((filter) => (
                         <button
                             key={filter.label}
@@ -123,7 +123,7 @@ export function LookbookGallery() {
                                 setActiveFilter(filter.label);
                                 setSelectedIndex(null);
                             }}
-                            className={`min-h-20 max-w-[280px] border px-5 py-3 text-left transition-all duration-300 ${
+                            className={`min-h-12 w-[76vw] max-w-[280px] flex-shrink-0 snap-start border px-4 py-3 text-left transition-all duration-300 md:min-h-20 md:w-auto md:px-5 ${
                                 activeFilter === filter.label
                                     ? "border-brand-gold bg-brand-gold/10 text-brand-white"
                                     : "border-brand-white/10 text-brand-white/60 hover:border-brand-white/25 hover:text-brand-white"
@@ -165,6 +165,9 @@ export function LookbookGallery() {
                 <div
                     className="fixed inset-0 z-[80] flex items-center justify-center bg-brand-black/90 px-4 py-8 backdrop-blur-md"
                     onClick={() => setSelectedIndex(null)}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Lookbook gallery viewer"
                 >
                     <button
                         type="button"
@@ -178,8 +181,9 @@ export function LookbookGallery() {
                         ‹
                     </button>
                     <div
-                        className="relative h-full max-h-[82vh] w-full max-w-5xl"
+                        className="relative max-h-[82svh] w-full max-w-5xl"
                         onClick={(event) => event.stopPropagation()}
+                        style={{ height: "min(82svh, 100vw)" }}
                     >
                         <Image
                             src={selectedImage}

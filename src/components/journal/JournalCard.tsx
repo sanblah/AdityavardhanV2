@@ -12,9 +12,9 @@ interface JournalCardProps {
 export function JournalCard({ image, title, category, height = "medium" }: JournalCardProps) {
     const heightClass =
         height === "tall"
-            ? "h-[350px] md:h-[500px]"
+            ? "h-[320px] md:h-[500px]"
             : height === "short"
-            ? "h-[200px] md:h-[280px]"
+            ? "h-[210px] md:h-[280px]"
             : "h-[260px] md:h-[380px]";
 
     return (

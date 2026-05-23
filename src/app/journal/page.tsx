@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function JournalPage() {
     return (
-        <main className="relative min-h-screen bg-brand-black pt-32">
+        <main className="relative min-h-screen bg-brand-black pt-28 md:pt-32">
             {/* Hero Header */}
             <div className="mx-auto max-w-4xl px-6 text-center">
                 <p className="font-heading text-xs uppercase tracking-[0.4em] text-brand-gold">

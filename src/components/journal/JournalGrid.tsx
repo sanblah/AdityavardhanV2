@@ -75,12 +75,12 @@ export function JournalGrid() {
         <section className="bg-brand-black py-16 md:py-24">
             <div className="mx-auto max-w-7xl px-6 md:px-12">
                 {/* Filter Pills */}
-                <div className="mb-12 flex flex-wrap justify-center gap-3">
+                <div className="-mx-6 mb-10 flex snap-x gap-3 overflow-x-auto px-6 pb-2 md:mx-0 md:mb-12 md:flex-wrap md:justify-center md:overflow-visible md:px-0 md:pb-0">
                     {filters.map((filter) => (
                         <button
                             key={filter}
                             onClick={() => setActiveFilter(filter)}
-                            className={`px-5 py-2 font-heading text-[10px] uppercase tracking-[0.2em] transition-all duration-300 border ${activeFilter === filter
+                            className={`min-h-11 flex-shrink-0 snap-start border px-5 py-2 font-heading text-[10px] uppercase tracking-[0.18em] transition-all duration-300 ${activeFilter === filter
                                     ? "border-brand-gold bg-brand-gold/10 text-brand-gold"
                                     : "border-brand-white/10 text-brand-white/50 hover:border-brand-white/20 hover:text-brand-white/70"
                                 }`}

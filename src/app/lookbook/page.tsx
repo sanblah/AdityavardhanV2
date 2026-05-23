@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function LookbookPage() {
     return (
-        <main className="relative min-h-screen bg-brand-black pt-32">
+        <main className="relative min-h-screen bg-brand-black pt-28 md:pt-32">
             <section className="mx-auto max-w-5xl px-6 text-center">
                 <h1 className="font-logo text-[clamp(2rem,6vw,4.5rem)] tracking-[0.1em] text-brand-white">
                     True Bespoke Craftsmanship
