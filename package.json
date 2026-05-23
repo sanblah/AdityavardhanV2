@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "verify:homepage": "node execution/verify-homepage-performance.mjs"
+    "verify:homepage": "node execution/verify-homepage-performance.mjs",
+    "verify:mobile": "node execution/verify-mobile.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -21,6 +22,7 @@
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^20",
     "@types/react": "^19",

@@ -6,6 +6,10 @@ node_modules/
 out/
 *.tsbuildinfo
 
+# Playwright artifacts
+test-results/
+playwright-report/
+
 # environment files
 .env
 .env.local
