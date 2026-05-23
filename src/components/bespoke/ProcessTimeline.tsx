@@ -61,40 +61,33 @@ export function ProcessTimeline() {
         const progressLine =
             containerRef.current.querySelector<HTMLElement>(".progress-line-fill");
 
-        // One pinned, scrubbed timeline. Each step owns a 1-unit slice. Panels
-        // share the same absolute position and only crossfade in opacity — no
-        // y motion, so the two layers don't read as competing stacked text
-        // during the swap. The fade is intentionally short so the boundary
-        // feels like a clean cut, not a sustained overlap.
+        // The panel is pinned by CSS sticky; GSAP only drives opacity and the
+        // progress line. This avoids ScrollTrigger mutating the section's
+        // layout while the user scrolls through the process steps.
         const fade = 0.08;
 
-        gsap.set(panels, { opacity: 0 });
-        gsap.set(panels[0], { opacity: 1 });
+        gsap.set(panels, { autoAlpha: 0 });
+        gsap.set(panels[0], { autoAlpha: 1 });
         if (progressLine) gsap.set(progressLine, { scaleY: 0 });
 
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: containerRef.current,
                 start: "top top",
-                end: `+=${n * 100}%`,
+                end: "bottom bottom",
                 scrub: 1,
-                pin: true,
-                anticipatePin: 1,
+                invalidateOnRefresh: true,
             },
         });
 
         for (let i = 1; i < n; i++) {
             const at = i - fade / 2; // crossfade centred on the boundary
-            tl.to(panels[i - 1], { opacity: 0, ease: "none", duration: fade }, at);
-            tl.to(panels[i], { opacity: 1, ease: "none", duration: fade }, at);
+            tl.to(panels[i - 1], { autoAlpha: 0, ease: "none", duration: fade }, at);
+            tl.to(panels[i], { autoAlpha: 1, ease: "none", duration: fade }, at);
         }
-        // Hold the last step visible, then fade the whole panel out before
-        // the pin releases — otherwise step 5 scrolls up over the next
-        // section (Words of Trust) during the unpin transition.
-        tl.to(panelRef.current, { opacity: 0, ease: "none", duration: 0.25 }, n - 0.25);
 
         if (progressLine) {
-            tl.to(progressLine, { scaleY: 1, ease: "none", duration: n - 0.25 }, 0);
+            tl.to(progressLine, { scaleY: 1, ease: "none", duration: n }, 0);
         }
 
         return () => {
@@ -150,13 +143,14 @@ export function ProcessTimeline() {
     return (
         <section
             ref={containerRef}
-            className="relative h-screen bg-brand-black"
+            className="relative bg-brand-black"
+            style={{ height: `${(steps.length + 1) * 100}vh` }}
         >
             <div
                 ref={panelRef}
-                className="relative flex h-full items-center overflow-hidden"
+                className="sticky top-0 flex h-screen flex-col overflow-hidden"
             >
-                <div className="absolute left-0 right-0 top-24 z-10 px-6 text-center md:top-28">
+                <div className="relative z-10 flex-shrink-0 px-6 pb-6 pt-24 text-center md:pt-28">
                     <p className="font-heading text-xs tracking-[0.4em] text-brand-gold">
                         Steps to the Perfect You
                     </p>
@@ -166,44 +160,46 @@ export function ProcessTimeline() {
                 </div>
 
                 {/* Gold progress line */}
-                <div className="absolute left-6 top-[15%] h-[70%] w-[1px] bg-brand-white/10 md:left-12">
+                <div className="absolute left-6 top-[26%] h-[58%] w-[1px] bg-brand-white/10 md:left-12">
                     <div className="progress-line-fill h-full w-full origin-top bg-brand-gold" />
                 </div>
 
-                {/* Steps */}
-                {steps.map((step, i) => (
-                    <div
-                        key={step.number}
-                        className="timeline-step absolute inset-0 flex items-center px-6 md:px-12"
-                        style={{ opacity: i === 0 ? 1 : 0 }}
-                    >
-                        <div className="mx-auto grid h-full max-h-screen w-full max-w-6xl items-center gap-5 overflow-hidden pb-8 pt-40 md:grid-cols-2 md:gap-12 md:pb-12 md:pt-44">
-                            {/* Text */}
-                            <div className="flex h-full flex-col justify-center pl-4 md:pl-12">
-                                <span className="font-heading text-4xl font-bold text-brand-gold/20 md:text-6xl lg:text-8xl">
-                                    {step.number}
-                                </span>
-                                <h3 className="mt-3 font-heading text-lg font-bold tracking-[0.08em] text-brand-white md:mt-4 md:text-2xl lg:text-4xl">
-                                    {step.title}
-                                </h3>
-                                <p className="mt-4 max-w-xl font-body text-[13px] font-book leading-relaxed text-brand-white/60 md:mt-6 md:text-base">
-                                    {step.description}
-                                </p>
-                            </div>
-                            {/* Image */}
-                            <div className="relative mx-auto aspect-[3/4] w-full max-w-md self-center overflow-hidden rounded-sm md:max-h-[58vh]">
-                                <Image
-                                    src={step.image}
-                                    alt={step.title}
-                                    fill
-                                    className="object-cover"
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                />
-                                <div className="absolute inset-0 bg-brand-black/10" />
+                <div className="relative flex-1">
+                    {/* Steps */}
+                    {steps.map((step, i) => (
+                        <div
+                            key={step.number}
+                            className="timeline-step absolute inset-0 flex items-center px-6 md:px-12"
+                            style={{ opacity: i === 0 ? 1 : 0 }}
+                        >
+                            <div className="mx-auto grid h-full w-full max-w-6xl items-center gap-5 overflow-hidden pb-10 md:grid-cols-2 md:gap-12 md:pb-16">
+                                {/* Text */}
+                                <div className="flex flex-col justify-center pl-4 md:pl-12">
+                                    <span className="font-heading text-4xl font-bold text-brand-gold/20 md:text-6xl lg:text-8xl">
+                                        {step.number}
+                                    </span>
+                                    <h3 className="mt-3 font-heading text-lg font-bold tracking-[0.08em] text-brand-white md:mt-4 md:text-2xl lg:text-4xl">
+                                        {step.title}
+                                    </h3>
+                                    <p className="mt-4 max-w-xl font-body text-[13px] font-book leading-relaxed text-brand-white/60 md:mt-6 md:text-base">
+                                        {step.description}
+                                    </p>
+                                </div>
+                                {/* Image */}
+                                <div className="relative mx-auto aspect-[3/4] h-full max-h-[58vh] w-full max-w-md self-center overflow-hidden rounded-sm">
+                                    <Image
+                                        src={step.image}
+                                        alt={step.title}
+                                        fill
+                                        className="object-cover"
+                                        sizes="(max-width: 768px) 100vw, 50vw"
+                                    />
+                                    <div className="absolute inset-0 bg-brand-black/10" />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         </section>
     );
