@@ -72,7 +72,7 @@ export function DateTimePicker({
                 <div className="mb-6 flex items-center justify-between">
                     <button
                         onClick={() => navigateMonth(-1)}
-                        className="font-heading text-sm text-brand-white/50 transition-colors hover:text-brand-white"
+                        className="flex h-11 w-11 items-center justify-center font-heading text-sm text-brand-white/50 transition-colors hover:text-brand-white"
                     >
                         ←
                     </button>
@@ -81,7 +81,7 @@ export function DateTimePicker({
                     </span>
                     <button
                         onClick={() => navigateMonth(1)}
-                        className="font-heading text-sm text-brand-white/50 transition-colors hover:text-brand-white"
+                        className="flex h-11 w-11 items-center justify-center font-heading text-sm text-brand-white/50 transition-colors hover:text-brand-white"
                     >
                         →
                     </button>
@@ -115,7 +115,7 @@ export function DateTimePicker({
                                 key={day}
                                 disabled={isPast}
                                 onClick={() => onDateSelect(dateStr)}
-                                className={`aspect-square flex items-center justify-center font-body text-sm transition-all duration-200 ${
+                                className={`flex min-h-10 aspect-square items-center justify-center font-body text-sm transition-all duration-200 sm:min-h-11 ${
                                     isPast
                                         ? "text-brand-white/15 cursor-not-allowed"
                                         : isSelected
@@ -140,7 +140,7 @@ export function DateTimePicker({
                         <button
                             key={time}
                             onClick={() => onTimeSelect(time)}
-                            className={`py-3 text-center font-body text-sm transition-all duration-200 border ${
+                            className={`min-h-11 border py-3 text-center font-body text-sm transition-all duration-200 ${
                                 selectedTime === time
                                     ? "border-brand-gold bg-brand-gold/10 text-brand-gold"
                                     : "border-brand-white/10 text-brand-white/60 hover:border-brand-white/20"

@@ -46,8 +46,8 @@ export function Testimonials() {
     }, { scope: containerRef });
 
     return (
-        <section ref={containerRef} className="relative z-10 bg-brand-black py-24 md:py-32">
-            <div className="mx-auto max-w-6xl px-6 md:px-12">
+        <section ref={containerRef} className="relative z-10 bg-brand-black py-20 md:py-32">
+            <div className="mx-auto max-w-6xl px-5 md:px-12">
                 <p className="text-center font-heading text-xs uppercase tracking-[0.4em] text-brand-gold">
                     Client Stories
                 </p>
@@ -55,7 +55,7 @@ export function Testimonials() {
                     Words of Trust
                 </h2>
 
-                <div className="mt-10 grid gap-8 md:mt-16 md:gap-12 md:grid-cols-3">
+                <div className="mt-10 grid gap-10 md:mt-16 md:grid-cols-3 md:gap-12">
                     {testimonials.map((t) => (
                         <div
                             key={t.name}

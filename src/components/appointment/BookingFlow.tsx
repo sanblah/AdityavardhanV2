@@ -38,9 +38,9 @@ export function BookingFlow() {
         currentStep === 0 && selectedDate && selectedTime;
 
     return (
-        <div className="mx-auto max-w-4xl px-6 py-16 md:px-12">
+        <div className="mx-auto max-w-4xl px-5 py-12 md:px-12 md:py-16">
             {/* Progress Bar */}
-            <div className="mb-16 flex items-center justify-center gap-0">
+            <div className="mb-10 flex items-start justify-center gap-2 md:mb-16">
                 {stepLabels.map((label, i) => (
                     <div key={label} className="flex items-center">
                         <div className="flex flex-col items-center">
@@ -61,7 +61,7 @@ export function BookingFlow() {
                         </div>
                         {i < stepLabels.length - 1 && (
                             <div
-                                className={`mx-4 h-[1px] w-16 transition-colors duration-300 ${i < currentStep ? "bg-brand-gold" : "bg-brand-white/10"
+                                className={`mx-2 mt-4 h-[1px] w-10 transition-colors duration-300 md:mx-4 md:w-16 ${i < currentStep ? "bg-brand-gold" : "bg-brand-white/10"
                                     }`}
                             />
                         )}
@@ -84,11 +84,11 @@ export function BookingFlow() {
 
             {/* Navigation */}
             {currentStep === 0 && (
-                <div className="mt-12 flex items-center justify-end">
+                <div className="mt-10 flex items-center justify-stretch md:justify-end">
                     <button
                         onClick={() => canProceed && animateTransition(1)}
                         disabled={!canProceed}
-                        className={`border px-8 py-3 font-heading text-xs uppercase tracking-[0.2em] transition-all duration-300 ${canProceed
+                        className={`min-h-12 w-full border px-8 py-3 font-heading text-xs uppercase tracking-[0.18em] transition-all duration-300 md:w-auto ${canProceed
                                 ? "border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
                                 : "border-brand-white/10 text-brand-white/20 cursor-not-allowed"
                             }`}

@@ -15,8 +15,8 @@ const distinctions = [
 
 export function WhyBespoke() {
     return (
-        <section className="relative z-10 bg-brand-black py-24 md:py-32">
-            <div className="mx-auto grid max-w-7xl gap-12 px-6 md:grid-cols-[0.85fr_1.15fr] md:px-12">
+        <section className="relative z-10 bg-brand-black py-20 md:py-32">
+            <div className="mx-auto grid max-w-7xl gap-10 px-5 md:grid-cols-[0.85fr_1.15fr] md:px-12">
                 <div>
                     <p className="font-heading text-xs tracking-[0.4em] text-brand-gold">
                         An Education in Craft

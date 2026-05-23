@@ -100,7 +100,7 @@ export function ProcessTimeline() {
         return (
             <section
                 ref={containerRef}
-                className="relative bg-brand-black px-6 pb-20 pt-28"
+                className="relative bg-brand-black px-5 pb-20 pt-24 md:px-6"
             >
                 <div className="text-center">
                     <p className="font-heading text-xs tracking-[0.4em] text-brand-gold">
@@ -111,7 +111,7 @@ export function ProcessTimeline() {
                     </h2>
                 </div>
 
-                <div className="mt-12 space-y-16">
+                <div className="mt-10 space-y-14">
                     {steps.map((step) => (
                         <div key={step.number}>
                             <span className="font-heading text-5xl font-bold text-brand-gold/20">
@@ -120,10 +120,10 @@ export function ProcessTimeline() {
                             <h3 className="mt-2 font-heading text-xl font-bold tracking-[0.08em] text-brand-white">
                                 {step.title}
                             </h3>
-                            <p className="mt-3 font-body text-sm font-book leading-relaxed text-brand-white/60">
+                            <p className="mt-3 font-body text-[13px] font-book leading-7 text-brand-white/60">
                                 {step.description}
                             </p>
-                            <div className="relative mt-6 aspect-[4/5] w-full overflow-hidden rounded-sm">
+                            <div className="relative mt-5 aspect-[4/5] w-full overflow-hidden rounded-sm">
                                 <Image
                                     src={step.image}
                                     alt={step.title}

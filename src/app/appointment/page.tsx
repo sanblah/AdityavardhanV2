@@ -7,9 +7,9 @@ export const metadata = {
 
 export default function AppointmentPage() {
     return (
-        <main className="relative min-h-screen bg-brand-black pt-32">
+        <main className="relative min-h-screen bg-brand-black pt-28 md:pt-32">
             {/* Hero Header */}
-            <div className="mx-auto max-w-4xl px-6 text-center">
+            <div className="mx-auto max-w-4xl px-5 text-center md:px-6">
                 <h1 className="font-logo text-[clamp(2rem,6vw,4rem)] tracking-[0.1em] text-brand-white">
                     Come home, settle in, dress up
                 </h1>

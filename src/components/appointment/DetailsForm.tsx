@@ -25,14 +25,19 @@ export function DetailsForm({ onSubmit }: DetailsFormProps) {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onSubmit={handleSubmit}
-                    className="mx-auto max-w-lg space-y-8"
+                    className="mx-auto max-w-lg space-y-7"
                 >
                     {/* ASVS 5.1.3 — Input length limits prevent DoS and truncation attacks */}
                     <div>
-                        <label className="block font-heading text-xs uppercase tracking-[0.2em] text-brand-white/50">
+                        <label
+                            htmlFor="appointment-name"
+                            className="block font-heading text-xs uppercase tracking-[0.2em] text-brand-white/50"
+                        >
                             Full Name
                         </label>
                         <input
+                            id="appointment-name"
+                            name="name"
                             type="text"
                             required
                             minLength={2}
@@ -44,10 +49,15 @@ export function DetailsForm({ onSubmit }: DetailsFormProps) {
                         />
                     </div>
                     <div>
-                        <label className="block font-heading text-xs uppercase tracking-[0.2em] text-brand-white/50">
+                        <label
+                            htmlFor="appointment-email"
+                            className="block font-heading text-xs uppercase tracking-[0.2em] text-brand-white/50"
+                        >
                             Email Address
                         </label>
                         <input
+                            id="appointment-email"
+                            name="email"
                             type="email"
                             required
                             maxLength={254}         /* RFC 5321 maximum email length */
@@ -59,10 +69,15 @@ export function DetailsForm({ onSubmit }: DetailsFormProps) {
                         />
                     </div>
                     <div>
-                        <label className="block font-heading text-xs uppercase tracking-[0.2em] text-brand-white/50">
+                        <label
+                            htmlFor="appointment-phone"
+                            className="block font-heading text-xs uppercase tracking-[0.2em] text-brand-white/50"
+                        >
                             Phone Number
                         </label>
                         <input
+                            id="appointment-phone"
+                            name="phone"
                             type="tel"
                             maxLength={20}
                             autoComplete="tel"
@@ -74,10 +89,15 @@ export function DetailsForm({ onSubmit }: DetailsFormProps) {
                         />
                     </div>
                     <div>
-                        <label className="block font-heading text-xs uppercase tracking-[0.2em] text-brand-white/50">
+                        <label
+                            htmlFor="appointment-notes"
+                            className="block font-heading text-xs uppercase tracking-[0.2em] text-brand-white/50"
+                        >
                             Special Requests / Notes
                         </label>
                         <textarea
+                            id="appointment-notes"
+                            name="notes"
                             rows={3}
                             maxLength={500}
                             autoComplete="off"
@@ -88,7 +108,7 @@ export function DetailsForm({ onSubmit }: DetailsFormProps) {
 
                     <button
                         type="submit"
-                        className="mt-4 w-full border border-brand-gold bg-transparent py-4 font-heading text-xs uppercase tracking-[0.25em] text-brand-gold transition-all duration-500 hover:bg-brand-gold hover:text-brand-black"
+                        className="mt-4 min-h-12 w-full border border-brand-gold bg-transparent px-4 py-4 font-heading text-xs uppercase tracking-[0.18em] text-brand-gold transition-all duration-500 hover:bg-brand-gold hover:text-brand-black"
                     >
                         Request Appointment
                     </button>
