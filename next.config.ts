@@ -115,7 +115,7 @@ const nextConfig: NextConfig = {
     // OWASP Top 10 A10 — Server-Side Request Forgery
     remotePatterns: [],
     formats: ["image/avif", "image/webp"],
-    minimumCacheTTL: 3600,
+    minimumCacheTTL: 31536000,
   },
 };
 

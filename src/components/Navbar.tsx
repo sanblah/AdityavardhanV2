@@ -9,7 +9,6 @@ import { BrandLogo } from "./BrandLogo";
 
 const navItems = [
     { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
     { name: "Bespoke", href: "/bespoke" },
     { name: "Journal", href: "/journal" },
     { name: "Appointment", href: "/appointment" },

@@ -6,9 +6,9 @@ import Image from "next/image";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 const collectionItems = [
-    { id: 1, title: "Atelier", subtitle: "", image: "/images/collection-1.jpg" },
-    { id: 2, title: "Ensembles", subtitle: "", image: "/images/collection-3.jpg" },
-    { id: 3, title: "Materials", subtitle: "", image: "/images/collection-2.jpg" },
+    { id: 1, title: "Atelier", image: "/images/collection-1.jpg" },
+    { id: 2, title: "Ensembles", image: "/images/collection-3.jpg" },
+    { id: 3, title: "Materials", image: "/images/collection-2.jpg" },
 ];
 
 export function ParallaxGallery() {
@@ -74,11 +74,6 @@ export function ParallaxGallery() {
 
                             {/* Title — always visible */}
                             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
-                                {item.subtitle && (
-                                    <p className="font-heading text-xs font-bold tracking-[0.3em] text-brand-gold">
-                                        {item.subtitle}
-                                    </p>
-                                )}
                                 <h3 className="font-heading text-2xl font-bold tracking-[0.08em] text-brand-white md:text-4xl lg:text-6xl">
                                     {item.title}
                                 </h3>

@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { BrandLogo } from "./BrandLogo";
 
 const pageLinks = [
-    { name: "About", href: "/about" },
     { name: "Bespoke", href: "/bespoke" },
     { name: "Journal", href: "/journal" },
     { name: "Appointment", href: "/appointment" },
@@ -22,11 +21,13 @@ export function Footer() {
     const pathname = usePathname();
     const isAppointmentPage = pathname === "/appointment";
 
+    // Per content guide: footer appears on all pages except Appointment
+    if (isAppointmentPage) return null;
+
     return (
         <footer className="relative z-20 overflow-hidden bg-brand-black">
-            {/* CTA Section - hidden on appointment page */}
-            {!isAppointmentPage && (
-                <div className="relative flex min-h-[60vh] flex-col justify-center border-t border-brand-gold/20 py-12 md:min-h-[85vh] md:py-20">
+            {/* CTA Section */}
+            <div className="relative flex min-h-[60vh] flex-col justify-center border-t border-brand-gold/20 py-12 md:min-h-[85vh] md:py-20">
                     {/* Ambient Glow */}
                     <div className="pointer-events-none absolute inset-0">
                         <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-gold/5 blur-[150px] md:h-[500px] md:w-[500px]" />
@@ -64,7 +65,6 @@ export function Footer() {
                         </motion.div>
                     </motion.div>
                 </div>
-            )}
 
             {/* Footer Bottom */}
             <div className="border-t border-brand-gold/10 bg-brand-black px-6 py-8">

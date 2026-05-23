@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 import { DrawLineLink } from "./DrawLineLink";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
@@ -16,52 +17,70 @@ const images = [
     "/images/parallax/parallax-13.jpg",
 ];
 
-// Scattered card positions — spread out to avoid overlap
-const cardPositions = [
-    { x: -30, y: -26, z: 0.2, rotate: -4, w: 280, h: 370 },
-    { x: 4, y: -30, z: 0.7, rotate: 3, w: 260, h: 350 },
-    { x: 32, y: -22, z: 0.4, rotate: -2, w: 270, h: 360 },
-    { x: -33, y: 6, z: 0.6, rotate: 5, w: 265, h: 355 },
-    { x: 33, y: 10, z: 0.3, rotate: -3, w: 275, h: 365 },
-    { x: -28, y: 28, z: 0.5, rotate: 3, w: 260, h: 345 },
-    { x: 5, y: 30, z: 0.8, rotate: -5, w: 255, h: 340 },
-    { x: 30, y: 30, z: 0.15, rotate: 2, w: 270, h: 360 },
-];
+// Evenly-spaced 4×2 grid in container-query units. Same z for every card so
+// they sit on one plane (no overlap, no depth jitter). Subtle rotation per
+// card adds character without breaking the symmetry.
+const COLS = [-36, -12, 12, 36];
+const ROWS = [-22, 22];
+const ROTATIONS = [-3, 2, -2, 3, 3, -3, 2, -2];
+
+const cardPositions = images.map((_, i) => ({
+    x: COLS[i % 4],
+    y: ROWS[Math.floor(i / 4)],
+    z: 0.4,
+    rotate: ROTATIONS[i],
+    w: 240,
+    h: 320,
+}));
 
 interface ParallaxCardsProps {
     perspective?: number;
     mouseSensitivity?: number;
-    enableDepthFog?: boolean;
-    fogIntensity?: number;
 }
 
 export function ParallaxCards({
     perspective = 2500,
-    mouseSensitivity = 3,
-    enableDepthFog = false,
-    fogIntensity = 1,
+    mouseSensitivity = 2,
 }: ParallaxCardsProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [mouse, setMouse] = useState({ x: 0, y: 0 });
-    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
     const targetMouse = useRef({ x: 0, y: 0 });
     const animFrame = useRef<number>(0);
     const isMobile = useIsMobile();
 
-    // Sensitivity reduced on mobile for lighter touch interaction
     const effectiveSensitivity = isMobile ? mouseSensitivity * 0.4 : mouseSensitivity;
 
     useEffect(() => {
         const animate = () => {
-            setMouse((prev) => ({
-                x: prev.x + (targetMouse.current.x - prev.x) * 0.08,
-                y: prev.y + (targetMouse.current.y - prev.y) * 0.08,
-            }));
+            setMouse((prev) => {
+                const nx = prev.x + (targetMouse.current.x - prev.x) * 0.08;
+                const ny = prev.y + (targetMouse.current.y - prev.y) * 0.08;
+                if (Math.abs(nx - prev.x) < 0.0005 && Math.abs(ny - prev.y) < 0.0005) {
+                    return prev;
+                }
+                return { x: nx, y: ny };
+            });
             animFrame.current = requestAnimationFrame(animate);
         };
         animFrame.current = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(animFrame.current);
     }, []);
+
+    // ESC closes the lightbox; body scroll locks while it's open.
+    useEffect(() => {
+        if (lightboxIndex === null) return;
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") setLightboxIndex(null);
+        };
+        const prevOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        window.addEventListener("keydown", onKey);
+        return () => {
+            window.removeEventListener("keydown", onKey);
+            document.body.style.overflow = prevOverflow;
+        };
+    }, [lightboxIndex]);
 
     const handleMouseMove = useCallback((e: React.MouseEvent) => {
         if (!containerRef.current) return;
@@ -90,16 +109,15 @@ export function ParallaxCards({
         targetMouse.current = { x: 0, y: 0 };
     }, []);
 
-    const handleCardClick = useCallback((index: number) => {
-        setSelectedIndex((prev) => (prev === index ? null : index));
+    const openLightbox = useCallback((index: number) => {
+        setLightboxIndex(index);
     }, []);
 
-    const handleBackdropClick = useCallback(() => {
-        setSelectedIndex(null);
+    const closeLightbox = useCallback(() => {
+        setLightboxIndex(null);
     }, []);
 
-    // Card scale factor on mobile
-    const cardScale = isMobile ? 0.55 : 1;
+    const cardScale = isMobile ? 0.6 : 1;
 
     return (
         <section
@@ -109,12 +127,11 @@ export function ParallaxCards({
             onMouseLeave={handleMouseLeave}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
-            onClick={selectedIndex !== null ? handleBackdropClick : undefined}
-            className="relative z-20 overflow-hidden bg-brand-black"
-            style={{ height: isMobile ? "100vh" : "130vh" }}
+            className="relative z-20 flex flex-col overflow-hidden bg-brand-black"
+            style={{ height: isMobile ? "100vh" : "120vh" }}
         >
-            {/* Section Header */}
-            <div className="absolute left-0 right-0 top-12 z-10 text-center">
+            {/* Header */}
+            <div className="relative z-40 flex-shrink-0 px-6 pt-24 pb-4 text-center md:pt-28">
                 <h2 className="font-heading text-xs font-bold tracking-[0.5em] text-brand-gold">
                     Lookbook
                 </h2>
@@ -125,18 +142,14 @@ export function ParallaxCards({
                 </DrawLineLink>
                 <p className="mx-auto mt-4 max-w-md font-body text-sm text-brand-white/50">
                     {isMobile
-                        ? "Tap a card to explore each piece"
-                        : "Move your cursor to explore each piece in depth"}
+                        ? "Tap a piece to view it in full"
+                        : "Hover to drift the scene · click any piece to view it in full"}
                 </p>
             </div>
 
-            {selectedIndex !== null && (
-                <div className="pointer-events-none absolute inset-0 z-20 bg-brand-black/35 backdrop-blur-sm" />
-            )}
-
             {/* 3D Scene */}
             <div
-                className="relative z-30 flex h-full w-full items-center justify-center"
+                className="relative z-30 flex w-full flex-1 items-center justify-center"
                 style={{
                     containerType: "size",
                     perspective: `${perspective}px`,
@@ -146,87 +159,101 @@ export function ParallaxCards({
                     className="relative h-full w-full"
                     style={{
                         transformStyle: "preserve-3d",
-                        transform: `rotateY(${mouse.x * effectiveSensitivity * 0.8}deg) rotateX(${-mouse.y * effectiveSensitivity * 0.8}deg)`,
+                        transform: `rotateY(${mouse.x * effectiveSensitivity * 0.6}deg) rotateX(${-mouse.y * effectiveSensitivity * 0.6}deg)`,
+                        transition: "transform 0.1s linear",
                     }}
                 >
                     {images.map((src, index) => {
                         const pos = cardPositions[index];
-                        const isSelected = selectedIndex === index;
-                        const anotherIsSelected = selectedIndex !== null && selectedIndex !== index;
-
-                        const parallaxX = mouse.x * pos.z * effectiveSensitivity * 40;
-                        const parallaxY = mouse.y * pos.z * effectiveSensitivity * 40;
-                        const zTranslate = pos.z * -400;
-
-                        const fogOpacity = enableDepthFog ? 1 - pos.z * 0.5 * fogIntensity : 1;
-                        const fogBlur = enableDepthFog ? pos.z * 2 * fogIntensity : 0;
-
-                        const finalOpacity = anotherIsSelected ? 0.25 : fogOpacity;
-                        const finalScale = isSelected
-                            ? (isMobile ? 1.4 : 1.8)
-                            : anotherIsSelected ? 0.85 : 1;
+                        const parallaxX = mouse.x * pos.z * effectiveSensitivity * 30;
+                        const parallaxY = mouse.y * pos.z * effectiveSensitivity * 30;
 
                         return (
-                            <div
+                            <button
                                 key={src}
-                                className="absolute left-1/2 top-1/2 cursor-pointer"
-                                onClick={(event) => {
-                                    event.stopPropagation();
-                                    handleCardClick(index);
-                                }}
-                                role="button"
-                                tabIndex={0}
-                                aria-expanded={isSelected}
-                                onKeyDown={(event) => {
-                                    if (event.key === "Enter" || event.key === " ") {
-                                        event.preventDefault();
-                                        handleCardClick(index);
-                                    }
-                                }}
+                                type="button"
+                                onClick={() => openLightbox(index)}
+                                aria-label={`View piece ${index + 1} in full`}
+                                className="absolute left-1/2 top-1/2 cursor-pointer rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                                 style={{
                                     width: `${pos.w * cardScale}px`,
                                     height: `${pos.h * cardScale}px`,
-                                    transform: isSelected
-                                        ? `translate(-50%, -50%) translate3d(0px, 0px, 200px) rotate(0deg) scale(${finalScale})`
-                                        : `translate(-50%, -50%) translate3d(calc(${pos.x}cqw + ${parallaxX}px), calc(${pos.y}cqh + ${parallaxY}px), ${zTranslate}px) rotate(${pos.rotate}deg) scale(${finalScale})`,
-                                    opacity: finalOpacity,
-                                    filter: fogBlur > 0 && !isSelected ? `blur(${fogBlur}px)` : "none",
+                                    transform: `translate(-50%, -50%) translate3d(calc(${pos.x}cqw + ${parallaxX}px), calc(${pos.y}cqh + ${parallaxY}px), 0px) rotate(${pos.rotate}deg)`,
                                     transformStyle: "preserve-3d",
-                                    zIndex: isSelected ? 50 : Math.round((1 - pos.z) * 10),
-                                    transition: isSelected
-                                        ? "transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.4s ease, z-index 0s"
-                                        : "transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.4s ease, z-index 0s 0.6s",
+                                    transition: "transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)",
+                                    padding: 0,
+                                    border: "none",
+                                    background: "transparent",
                                 }}
                             >
                                 <div
-                                    className="relative h-full w-full overflow-hidden rounded-lg"
+                                    className="relative h-full w-full overflow-hidden rounded-lg transition-transform duration-500 hover:scale-[1.04]"
                                     style={{
-                                        boxShadow: isSelected
-                                            ? "0 40px 100px rgba(0,0,0,0.7), 0 0 60px rgba(161,132,108,0.25)"
-                                            : "0 15px 30px rgba(0,0,0,0.4)",
-                                        transition: "box-shadow 0.6s ease",
+                                        boxShadow: "0 18px 36px rgba(0,0,0,0.45)",
                                     }}
                                 >
                                     <Image
                                         src={src}
                                         alt={`Collection piece ${index + 1}`}
                                         fill
-                                        sizes="300px"
+                                        sizes="240px"
                                         className="object-cover"
                                     />
-                                    <div
-                                        className="absolute inset-0 rounded-lg border"
-                                        style={{
-                                            borderColor: isSelected ? "rgba(161,132,108,0.5)" : "rgba(255,255,255,0.1)",
-                                            transition: "border-color 0.6s ease",
-                                        }}
-                                    />
+                                    <div className="absolute inset-0 rounded-lg border border-brand-white/10" />
                                 </div>
-                            </div>
+                            </button>
                         );
                     })}
                 </div>
             </div>
+
+            {/* Lightbox */}
+            <AnimatePresence>
+                {lightboxIndex !== null && (
+                    <motion.div
+                        key="lightbox"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        onClick={closeLightbox}
+                        className="fixed inset-0 z-[80] flex items-center justify-center bg-brand-black/90 backdrop-blur-md px-4 py-10"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Lookbook image viewer"
+                    >
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                closeLightbox();
+                            }}
+                            aria-label="Close"
+                            className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full border border-brand-white/30 text-brand-white/80 transition hover:border-brand-gold hover:text-brand-gold"
+                        >
+                            <span aria-hidden className="text-lg leading-none">&times;</span>
+                        </button>
+
+                        <motion.div
+                            initial={{ scale: 0.92, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.96, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="relative h-[85vh] w-[90vw] max-w-5xl"
+                        >
+                            <Image
+                                src={images[lightboxIndex]}
+                                alt={`Collection piece ${lightboxIndex + 1}`}
+                                fill
+                                sizes="90vw"
+                                className="object-contain"
+                                priority
+                            />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 }

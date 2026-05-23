@@ -1,9 +1,16 @@
+import dynamic from "next/dynamic";
 import { Hero } from "@/components/Hero";
-import { ParallaxGallery } from "@/components/ParallaxGallery";
-import { ParallaxCards } from "@/components/ParallaxCards";
-import { About } from "@/components/About";
-import { Testimonials } from "@/components/Testimonials";
 import { VideoBackground } from "@/components/VideoBackground";
+
+const ParallaxGallery = dynamic(() =>
+    import("@/components/ParallaxGallery").then((m) => ({ default: m.ParallaxGallery }))
+);
+const ParallaxCards = dynamic(() =>
+    import("@/components/ParallaxCards").then((m) => ({ default: m.ParallaxCards }))
+);
+const Testimonials = dynamic(() =>
+    import("@/components/Testimonials").then((m) => ({ default: m.Testimonials }))
+);
 
 export default function Home() {
     return (
@@ -16,8 +23,6 @@ export default function Home() {
             <ParallaxGallery />
             {/* 3D Parallax Cards Lookbook */}
             <ParallaxCards />
-            {/* About has transparent bg - video visible behind glass cards */}
-            <About />
             {/* Client Testimonials */}
             <Testimonials />
         </main>

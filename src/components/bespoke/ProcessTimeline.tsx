@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 const steps = [
@@ -48,94 +48,115 @@ export function ProcessTimeline() {
     const panelRef = useRef<HTMLDivElement>(null);
     const isMobile = useIsMobile();
 
-    const sectionHeight = steps.length * (isMobile ? 80 : 100);
-
     useGSAP(() => {
+        // Mobile uses a plain stacked layout — no pin/scrub (pinning is
+        // unreliable when the section height changes on the isMobile flip).
+        if (isMobile) return;
         if (!containerRef.current || !panelRef.current) return;
-        const panels = panelRef.current.querySelectorAll(".timeline-step");
+        const panels = Array.from(
+            panelRef.current.querySelectorAll<HTMLElement>(".timeline-step")
+        );
+        const n = panels.length;
+        if (n === 0) return;
+        const progressLine =
+            containerRef.current.querySelector<HTMLElement>(".progress-line-fill");
 
-        // Pin the container and scrub through steps
-        ScrollTrigger.create({
-            trigger: containerRef.current,
-            start: "top top",
-            end: `+=${steps.length * (isMobile ? 80 : 100)}%`,
-            pin: panelRef.current,
-            pinSpacing: false,
+        // One pinned, scrubbed timeline. Each step owns a 1-unit slice. Panels
+        // share the same absolute position and only crossfade in opacity — no
+        // y motion, so the two layers don't read as competing stacked text
+        // during the swap. The fade is intentionally short so the boundary
+        // feels like a clean cut, not a sustained overlap.
+        const fade = 0.08;
+
+        gsap.set(panels, { opacity: 0 });
+        gsap.set(panels[0], { opacity: 1 });
+        if (progressLine) gsap.set(progressLine, { scaleY: 0 });
+
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: containerRef.current,
+                start: "top top",
+                end: `+=${n * 100}%`,
+                scrub: 1,
+                pin: true,
+                anticipatePin: 1,
+            },
         });
 
-        // Animate each step in and out
-        panels.forEach((panel, i) => {
-            const start = i / steps.length;
-            const end = (i + 1) / steps.length;
+        for (let i = 1; i < n; i++) {
+            const at = i - fade / 2; // crossfade centred on the boundary
+            tl.to(panels[i - 1], { opacity: 0, ease: "none", duration: fade }, at);
+            tl.to(panels[i], { opacity: 1, ease: "none", duration: fade }, at);
+        }
+        // Hold the last step visible, then fade the whole panel out before
+        // the pin releases — otherwise step 5 scrolls up over the next
+        // section (Words of Trust) during the unpin transition.
+        tl.to(panelRef.current, { opacity: 0, ease: "none", duration: 0.25 }, n - 0.25);
 
-            // Fade in
-            gsap.fromTo(
-                panel,
-                { opacity: 0, y: 40 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: containerRef.current,
-                        start: `${start * 100}% top`,
-                        end: `${(start + 0.1) * 100}% top`,
-                        scrub: true,
-                    },
-                }
-            );
-
-            // Fade out (except last)
-            if (i < steps.length - 1) {
-                gsap.to(panel, {
-                    opacity: 0,
-                    y: -30,
-                    ease: "power2.in",
-                    scrollTrigger: {
-                        trigger: containerRef.current,
-                        start: `${(end - 0.1) * 100}% top`,
-                        end: `${end * 100}% top`,
-                        scrub: true,
-                    },
-                });
-            }
-        });
-
-        // Progress line
-        const progressLine = containerRef.current.querySelector(".progress-line-fill");
         if (progressLine) {
-            gsap.fromTo(
-                progressLine,
-                { scaleY: 0 },
-                {
-                    scaleY: 1,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: containerRef.current,
-                        start: "top top",
-                        end: "bottom bottom",
-                        scrub: true,
-                    },
-                }
-            );
+            tl.to(progressLine, { scaleY: 1, ease: "none", duration: n - 0.25 }, 0);
         }
 
         return () => {
-            ScrollTrigger.getAll().forEach((t) => t.kill());
+            tl.scrollTrigger?.kill();
+            tl.kill();
         };
     }, { scope: containerRef, dependencies: [isMobile] });
+
+    if (isMobile) {
+        return (
+            <section
+                ref={containerRef}
+                className="relative bg-brand-black px-6 pb-20 pt-28"
+            >
+                <div className="text-center">
+                    <p className="font-heading text-xs tracking-[0.4em] text-brand-gold">
+                        Steps to the Perfect You
+                    </p>
+                    <h2 className="mt-3 font-heading text-2xl font-bold tracking-[0.08em] text-brand-white">
+                        From Vision to Heirloom
+                    </h2>
+                </div>
+
+                <div className="mt-12 space-y-16">
+                    {steps.map((step) => (
+                        <div key={step.number}>
+                            <span className="font-heading text-5xl font-bold text-brand-gold/20">
+                                {step.number}
+                            </span>
+                            <h3 className="mt-2 font-heading text-xl font-bold tracking-[0.08em] text-brand-white">
+                                {step.title}
+                            </h3>
+                            <p className="mt-3 font-body text-sm font-book leading-relaxed text-brand-white/60">
+                                {step.description}
+                            </p>
+                            <div className="relative mt-6 aspect-[4/5] w-full overflow-hidden rounded-sm">
+                                <Image
+                                    src={step.image}
+                                    alt={step.title}
+                                    fill
+                                    className="object-cover"
+                                    sizes="100vw"
+                                />
+                                <div className="absolute inset-0 bg-brand-black/10" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section
             ref={containerRef}
-            className="relative overflow-hidden bg-brand-black"
-            style={{ height: `${sectionHeight}vh` }}
+            className="relative h-screen bg-brand-black"
         >
             <div
                 ref={panelRef}
-                className="relative flex h-screen items-center overflow-hidden"
+                className="relative flex h-full items-center overflow-hidden"
             >
-                <div className="absolute left-0 right-0 top-10 z-10 px-6 text-center md:top-14">
+                <div className="absolute left-0 right-0 top-24 z-10 px-6 text-center md:top-28">
                     <p className="font-heading text-xs tracking-[0.4em] text-brand-gold">
                         Steps to the Perfect You
                     </p>
@@ -156,9 +177,9 @@ export function ProcessTimeline() {
                         className="timeline-step absolute inset-0 flex items-center px-6 md:px-12"
                         style={{ opacity: i === 0 ? 1 : 0 }}
                     >
-                        <div className="mx-auto grid h-full max-h-screen w-full max-w-6xl items-center gap-5 overflow-hidden pb-8 pt-28 md:gap-12 md:grid-cols-2 md:py-12">
+                        <div className="mx-auto grid h-full max-h-screen w-full max-w-6xl items-center gap-5 overflow-hidden pb-8 pt-40 md:grid-cols-2 md:gap-12 md:pb-12 md:pt-44">
                             {/* Text */}
-                            <div className="pl-8 md:pl-16">
+                            <div className="flex h-full flex-col justify-center pl-4 md:pl-12">
                                 <span className="font-heading text-4xl font-bold text-brand-gold/20 md:text-6xl lg:text-8xl">
                                     {step.number}
                                 </span>
@@ -170,7 +191,7 @@ export function ProcessTimeline() {
                                 </p>
                             </div>
                             {/* Image */}
-                            <div className="relative aspect-[3/4] max-h-[24vh] overflow-hidden rounded-sm md:max-h-[60vh]">
+                            <div className="relative mx-auto aspect-[3/4] w-full max-w-md self-center overflow-hidden rounded-sm md:max-h-[58vh]">
                                 <Image
                                     src={step.image}
                                     alt={step.title}
