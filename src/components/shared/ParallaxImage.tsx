@@ -3,6 +3,8 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 interface ParallaxImageProps {
     src: string;
@@ -19,8 +21,11 @@ export function ParallaxImage({
 }: ParallaxImageProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<HTMLDivElement>(null);
+    const isMobile = useIsMobile();
+    const prefersReducedMotion = usePrefersReducedMotion();
 
     useGSAP(() => {
+        if (isMobile || prefersReducedMotion) return;
         if (!containerRef.current || !imageRef.current) return;
         gsap.fromTo(
             imageRef.current,
@@ -36,7 +41,7 @@ export function ParallaxImage({
                 },
             }
         );
-    }, { scope: containerRef });
+    }, { scope: containerRef, dependencies: [isMobile, prefersReducedMotion, speed] });
 
     return (
         <div ref={containerRef} className={`overflow-hidden ${className}`}>

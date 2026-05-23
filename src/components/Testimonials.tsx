@@ -3,6 +3,7 @@
 import { useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { DrawLineLink } from "./DrawLineLink";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const testimonials = [
     {
@@ -54,9 +55,11 @@ function TiltCard({
     const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
     const [glare, setGlare] = useState({ x: 50, y: 50 });
     const [isHovering, setIsHovering] = useState(false);
+    const isMobile = useIsMobile();
 
     const handleMouseMove = useCallback(
         (e: React.MouseEvent<HTMLDivElement>) => {
+            if (isMobile) return;
             if (!cardRef.current) return;
             const rect = cardRef.current.getBoundingClientRect();
             const x = (e.clientX - rect.left) / rect.width;
@@ -68,17 +71,19 @@ function TiltCard({
             setTilt({ rotateX, rotateY });
             setGlare({ x: x * 100, y: y * 100 });
         },
-        []
+        [isMobile]
     );
 
     const handleMouseLeave = useCallback(() => {
+        if (isMobile) return;
         setTilt({ rotateX: 0, rotateY: 0 });
         setIsHovering(false);
-    }, []);
+    }, [isMobile]);
 
     const handleMouseEnter = useCallback(() => {
+        if (isMobile) return;
         setIsHovering(true);
-    }, []);
+    }, [isMobile]);
 
     return (
         <motion.div
@@ -100,12 +105,16 @@ function TiltCard({
                 onMouseEnter={handleMouseEnter}
                 className="group relative h-full overflow-hidden rounded-2xl border border-brand-white/10 bg-black/25 backdrop-blur-2xl transition-[border-color,background-color] duration-500 hover:border-brand-gold/30 hover:bg-black/35"
                 style={{
-                    transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
-                    transition: isHovering
-                        ? "transform 0.1s ease-out"
-                        : "transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1)",
-                    transformStyle: "preserve-3d",
-                    willChange: "transform",
+                    transform: isMobile
+                        ? "none"
+                        : `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
+                    transition: isMobile
+                        ? "border-color 0.3s ease, background-color 0.3s ease"
+                        : isHovering
+                          ? "transform 0.1s ease-out"
+                          : "transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1)",
+                    transformStyle: isMobile ? "flat" : "preserve-3d",
+                    willChange: isMobile ? "auto" : "transform",
                 }}
             >
                 {/* Glare Overlay */}
