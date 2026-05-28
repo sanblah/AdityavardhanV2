@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function ComingSoonPage() {
     return (
-        <main className="relative isolate min-h-[100dvh] overflow-hidden bg-brand-black text-brand-white">
+        <main className="relative isolate h-[100dvh] overflow-hidden bg-brand-black text-brand-white">
             <Image
                 src="/images/hero/hero-video-poster.jpg"
                 alt=""
@@ -36,7 +36,7 @@ export default function ComingSoonPage() {
             <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-brand-black/55 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-brand-black/80 to-transparent" />
 
-            <section className="relative z-10 mx-auto grid min-h-[100dvh] w-full max-w-7xl grid-rows-[auto_1fr_auto] px-5 py-7 md:px-12 md:py-10">
+            <section className="relative z-10 mx-auto grid h-full w-full max-w-7xl grid-rows-[auto_1fr] px-5 py-7 md:px-12 md:py-10">
                 <header className="flex items-start justify-between gap-6">
                     <BrandLogo
                         className="h-auto w-[min(58vw,300px)]"
@@ -65,12 +65,6 @@ export default function ComingSoonPage() {
                         </p>
                     </div>
                 </div>
-
-                <footer className="grid gap-4 border-t border-brand-white/15 pt-5 text-[10px] uppercase tracking-[0.26em] text-brand-white/52 md:grid-cols-3 md:items-end">
-                    <p>ADITYAVARDHAN</p>
-                    <p className="md:text-center">Handcrafted bespoke menswear</p>
-                    <p className="md:text-right">Launching shortly</p>
-                </footer>
             </section>
         </main>
     );

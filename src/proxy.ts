@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 const comingSoonOnly = process.env.COMING_SOON_ONLY !== "false";
+const standaloneHeader = "x-adityavardhan-standalone";
 
 export function proxy(request: NextRequest) {
     if (!comingSoonOnly) {
@@ -12,7 +13,14 @@ export function proxy(request: NextRequest) {
         return NextResponse.next();
     }
 
-    return NextResponse.rewrite(new URL("/coming-soon", request.url));
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set(standaloneHeader, "1");
+
+    return NextResponse.rewrite(new URL("/coming-soon", request.url), {
+        request: {
+            headers: requestHeaders,
+        },
+    });
 }
 
 export const config = {
