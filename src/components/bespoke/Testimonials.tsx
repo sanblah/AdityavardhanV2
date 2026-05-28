@@ -51,7 +51,7 @@ export function Testimonials() {
                 <p className="text-center font-heading text-xs uppercase tracking-[0.4em] text-brand-gold">
                     Client Stories
                 </p>
-                <h2 className="mt-4 text-center font-heading text-3xl font-bold uppercase tracking-[0.1em] text-brand-white md:text-4xl">
+                <h2 className="mt-4 text-center font-heading text-3xl font-book uppercase tracking-[0.1em] text-brand-white md:text-4xl">
                     Words of Trust
                 </h2>
 

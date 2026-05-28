@@ -23,14 +23,14 @@ export function SectionHeading({
         <div className={textAlign}>
             {subtitle && (
                 <ScrollReveal>
-                    <p className="font-heading text-xs font-bold uppercase tracking-[0.4em] text-brand-gold">
+                    <p className="font-heading text-xs font-book uppercase tracking-[0.4em] text-brand-gold">
                         {subtitle}
                     </p>
                 </ScrollReveal>
             )}
             <ScrollReveal delay={0.1}>
                 <h2
-                    className={`mt-4 font-heading text-3xl font-bold uppercase tracking-[0.1em] md:text-5xl ${
+                    className={`mt-4 font-heading text-3xl font-book uppercase tracking-[0.1em] md:text-5xl ${
                         light ? "text-brand-white" : "text-brand-white"
                     }`}
                 >

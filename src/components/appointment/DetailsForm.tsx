@@ -131,7 +131,7 @@ export function DetailsForm({ onSubmit }: DetailsFormProps) {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                     </div>
-                    <h3 className="font-heading text-2xl font-bold uppercase tracking-[0.1em] text-brand-white">
+                    <h3 className="font-heading text-2xl font-book uppercase tracking-[0.1em] text-brand-white">
                         Appointment Confirmed
                     </h3>
                     <p className="mt-4 font-body text-sm font-book text-brand-white/60">

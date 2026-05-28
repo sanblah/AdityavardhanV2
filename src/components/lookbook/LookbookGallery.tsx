@@ -129,7 +129,7 @@ export function LookbookGallery() {
                                     : "border-brand-white/10 text-brand-white/60 hover:border-brand-white/25 hover:text-brand-white"
                             }`}
                         >
-                            <span className="block font-heading text-xs font-demi tracking-[0.12em]">
+                            <span className="block font-heading text-xs font-book uppercase tracking-[0.12em]">
                                 {filter.label}
                             </span>
                             <span className="mt-2 block font-body text-xs font-book leading-relaxed text-brand-white/45">

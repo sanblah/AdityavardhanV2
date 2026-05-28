@@ -47,7 +47,7 @@ export function ServiceSelect({ selected, onSelect }: ServiceSelectProps) {
                     }`}
                 >
                     <h3
-                        className={`font-heading text-sm font-bold uppercase tracking-[0.1em] ${
+                        className={`font-heading text-sm font-book uppercase tracking-[0.1em] ${
                             selected === service.id ? "text-brand-gold" : "text-brand-white"
                         }`}
                     >

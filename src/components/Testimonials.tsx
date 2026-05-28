@@ -168,11 +168,11 @@ export function Testimonials() {
                         className="text-brand-gold"
                         strokeWidth={14}
                     >
-                        <span className="font-heading text-xs font-bold uppercase tracking-[0.5em] text-brand-gold">
+                        <span className="font-heading text-xs font-book uppercase tracking-[0.5em] text-brand-gold">
                             Testimonials
                         </span>
                     </DrawLineLink>
-                    <p className="mx-auto mt-6 max-w-2xl font-heading text-xl font-bold leading-relaxed text-brand-white md:mt-8 md:text-2xl lg:text-4xl">
+                    <p className="mx-auto mt-6 max-w-2xl font-heading text-xl font-book uppercase leading-relaxed tracking-[0.08em] text-brand-white md:mt-8 md:text-2xl lg:text-4xl">
                         The love that keeps us going
                     </p>
                 </motion.div>
@@ -214,7 +214,7 @@ export function Testimonials() {
                             {/* Client Info */}
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="font-heading text-sm font-bold uppercase tracking-[0.1em] text-brand-white">
+                                    <p className="font-heading text-sm font-book uppercase tracking-[0.1em] text-brand-white">
                                         {testimonial.name}
                                     </p>
                                     <p className="mt-1 font-body text-xs font-book uppercase tracking-[0.15em] text-brand-gold/70">
@@ -269,7 +269,7 @@ export function Testimonials() {
                             {/* Client Info */}
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="font-heading text-sm font-bold uppercase tracking-[0.1em] text-brand-white">
+                                    <p className="font-heading text-sm font-book uppercase tracking-[0.1em] text-brand-white">
                                         {testimonial.name}
                                     </p>
                                     <p className="mt-1 font-body text-xs font-book uppercase tracking-[0.15em] text-brand-gold/70">
@@ -334,7 +334,7 @@ export function Testimonials() {
                                     </svg>
                                 ))}
                             </div>
-                            <span className="font-heading text-xs font-bold uppercase tracking-[0.1em] text-brand-white/80">
+                            <span className="font-heading text-xs font-book uppercase tracking-[0.1em] text-brand-white/80">
                                 5.0
                             </span>
                         </div>

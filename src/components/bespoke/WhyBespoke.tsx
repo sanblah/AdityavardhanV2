@@ -18,10 +18,10 @@ export function WhyBespoke() {
         <section className="relative z-10 bg-brand-black py-20 md:py-32">
             <div className="mx-auto grid max-w-7xl gap-10 px-5 md:grid-cols-[0.85fr_1.15fr] md:px-12">
                 <div>
-                    <p className="font-heading text-xs tracking-[0.4em] text-brand-gold">
+                    <p className="font-heading text-xs uppercase tracking-[0.4em] text-brand-gold">
                         An Education in Craft
                     </p>
-                    <h2 className="mt-4 font-heading text-3xl font-bold tracking-[0.08em] text-brand-white md:text-5xl">
+                    <h2 className="mt-4 font-heading text-3xl font-book uppercase tracking-[0.08em] text-brand-white md:text-5xl">
                         Beyond Designer
                     </h2>
                 </div>
@@ -39,7 +39,7 @@ export function WhyBespoke() {
                     <div className="space-y-6">
                         {distinctions.map((item) => (
                             <div key={item.title} className="border-t border-brand-white/10 pt-5">
-                                <p className="font-demi text-brand-gold">{item.title}</p>
+                                <p className="font-book uppercase tracking-[0.08em] text-brand-gold">{item.title}</p>
                                 <p className="mt-2">{item.body}</p>
                             </div>
                         ))}

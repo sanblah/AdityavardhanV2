@@ -103,10 +103,10 @@ export function ProcessTimeline() {
                 className="relative bg-brand-black px-5 pb-20 pt-24 md:px-6"
             >
                 <div className="text-center">
-                    <p className="font-heading text-xs tracking-[0.4em] text-brand-gold">
+                    <p className="font-heading text-xs uppercase tracking-[0.4em] text-brand-gold">
                         Steps to the Perfect You
                     </p>
-                    <h2 className="mt-3 font-heading text-2xl font-bold tracking-[0.08em] text-brand-white">
+                    <h2 className="mt-3 font-heading text-2xl font-book uppercase tracking-[0.08em] text-brand-white">
                         From Vision to Heirloom
                     </h2>
                 </div>
@@ -114,10 +114,10 @@ export function ProcessTimeline() {
                 <div className="mt-10 space-y-14">
                     {steps.map((step) => (
                         <div key={step.number}>
-                            <span className="font-heading text-5xl font-bold text-brand-gold/20">
+                            <span className="font-heading text-5xl font-book text-brand-gold/20">
                                 {step.number}
                             </span>
-                            <h3 className="mt-2 font-heading text-xl font-bold tracking-[0.08em] text-brand-white">
+                            <h3 className="mt-2 font-heading text-xl font-book uppercase tracking-[0.08em] text-brand-white">
                                 {step.title}
                             </h3>
                             <p className="mt-3 font-body text-[13px] font-book leading-7 text-brand-white/60">
@@ -151,10 +151,10 @@ export function ProcessTimeline() {
                 className="sticky top-0 flex h-screen flex-col overflow-hidden"
             >
                 <div className="relative z-10 flex-shrink-0 px-6 pb-6 pt-24 text-center md:pt-28">
-                    <p className="font-heading text-xs tracking-[0.4em] text-brand-gold">
+                    <p className="font-heading text-xs uppercase tracking-[0.4em] text-brand-gold">
                         Steps to the Perfect You
                     </p>
-                    <h2 className="mt-3 font-heading text-2xl font-bold tracking-[0.08em] text-brand-white md:text-4xl">
+                    <h2 className="mt-3 font-heading text-2xl font-book uppercase tracking-[0.08em] text-brand-white md:text-4xl">
                         From Vision to Heirloom
                     </h2>
                 </div>
@@ -175,10 +175,10 @@ export function ProcessTimeline() {
                             <div className="mx-auto grid h-full w-full max-w-6xl items-center gap-5 overflow-hidden pb-10 md:grid-cols-2 md:gap-12 md:pb-16">
                                 {/* Text */}
                                 <div className="flex flex-col justify-center pl-4 md:pl-12">
-                                    <span className="font-heading text-4xl font-bold text-brand-gold/20 md:text-6xl lg:text-8xl">
+                                    <span className="font-heading text-4xl font-book text-brand-gold/20 md:text-6xl lg:text-8xl">
                                         {step.number}
                                     </span>
-                                    <h3 className="mt-3 font-heading text-lg font-bold tracking-[0.08em] text-brand-white md:mt-4 md:text-2xl lg:text-4xl">
+                                    <h3 className="mt-3 font-heading text-lg font-book uppercase tracking-[0.08em] text-brand-white md:mt-4 md:text-2xl lg:text-4xl">
                                         {step.title}
                                     </h3>
                                     <p className="mt-4 max-w-xl font-body text-[13px] font-book leading-relaxed text-brand-white/60 md:mt-6 md:text-base">

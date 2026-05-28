@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { PageTransition } from "@/components/layout/PageTransition";
+import { SiteChrome } from "@/components/layout/SiteChrome";
 
 const avantGarde = localFont({
     src: [
@@ -38,9 +36,7 @@ export default function RootLayout({
     return (
         <html lang="en" className={avantGarde.variable}>
             <body>
-                <Navbar />
-                <PageTransition>{children}</PageTransition>
-                <Footer />
+                <SiteChrome>{children}</SiteChrome>
             </body>
         </html>
     );

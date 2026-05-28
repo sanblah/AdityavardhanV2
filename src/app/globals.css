@@ -65,16 +65,17 @@ body {
   min-height: 100dvh;
   overflow-x: clip;
   font-family: var(--font-family-body);
+  font-weight: 300;
   background-color: var(--color-background);
   color: var(--color-foreground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Brand Logo Typography - elegant serif matching the wordmark */
+/* Brand typography */
 .font-logo {
   font-family: var(--font-family-logo);
-  font-weight: 700;
+  font-weight: 300;
   letter-spacing: 0.15em;
 }
 
@@ -102,11 +103,11 @@ body {
 }
 
 .font-demi {
-  font-weight: 500;
+  font-weight: 300;
 }
 
 .font-bold {
-  font-weight: 700;
+  font-weight: 300;
 }
 
 /* ===== Draw Line Underline (pure CSS) ===== */

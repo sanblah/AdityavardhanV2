@@ -24,10 +24,10 @@ export default function BespokePage() {
                     className="relative z-10 flex min-h-[100svh] flex-col items-center justify-center px-5 pb-16 pt-24 text-center md:h-full md:px-6"
                     style={{ paddingTop: "calc(6rem + var(--safe-top))" }}
                 >
-                    <p className="font-heading text-xs tracking-[0.4em] text-brand-gold">
+                    <p className="font-heading text-xs uppercase tracking-[0.4em] text-brand-gold">
                         A Garment Made for One
                     </p>
-                    <h1 className="mt-4 font-logo text-[clamp(2rem,8vw,5rem)] tracking-[0.12em] text-brand-white">
+                    <h1 className="mt-4 font-logo text-[clamp(2rem,8vw,5rem)] uppercase tracking-[0.12em] text-brand-white">
                         The Bespoke Experience
                     </h1>
                     <p className="mt-6 max-w-3xl font-body text-sm font-book leading-relaxed text-brand-white/65 md:text-base">

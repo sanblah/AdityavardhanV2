@@ -23,7 +23,7 @@ export default function GlobalError({ error, reset }: ErrorProps) {
             <p className="font-heading text-xs uppercase tracking-[0.4em] text-brand-gold">
                 Error
             </p>
-            <h1 className="mt-4 font-heading text-4xl font-bold uppercase tracking-[0.12em] text-brand-white md:text-5xl">
+            <h1 className="mt-4 font-heading text-4xl font-book uppercase tracking-[0.12em] text-brand-white md:text-5xl">
                 Something Went Wrong
             </h1>
             <p className="mt-6 max-w-sm font-body text-sm font-book text-brand-white/50">

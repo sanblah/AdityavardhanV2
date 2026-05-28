@@ -43,7 +43,7 @@ export function Footer() {
                     <h2 className="font-heading text-sm uppercase tracking-[0.4em] text-brand-gold">
                         Get in Touch
                     </h2>
-                    <p className="mt-6 text-balance font-heading text-3xl font-bold tracking-[0.04em] text-brand-white md:text-4xl md:tracking-[0.06em] lg:text-6xl">
+                    <p className="mt-6 text-balance font-heading text-3xl font-book uppercase tracking-[0.04em] text-brand-white md:text-4xl md:tracking-[0.06em] lg:text-6xl">
                         Let&apos;s Make Your Dreams Come True
                     </p>
                     <p className="mx-auto mt-6 max-w-lg text-brand-white/60">

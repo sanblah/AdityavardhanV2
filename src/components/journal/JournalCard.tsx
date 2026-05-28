@@ -38,7 +38,7 @@ export function JournalCard({ image, title, category, height = "medium" }: Journ
                 <p className="font-heading text-xs uppercase tracking-[0.4em] text-brand-gold">
                     {category}
                 </p>
-                <h3 className="mt-1 font-heading text-sm font-bold uppercase tracking-[0.1em] text-brand-white md:mt-2 md:px-4 md:text-center md:text-lg">
+                <h3 className="mt-1 font-heading text-sm font-book uppercase tracking-[0.1em] text-brand-white md:mt-2 md:px-4 md:text-center md:text-lg">
                     {title}
                 </h3>
             </div>

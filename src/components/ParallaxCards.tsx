@@ -195,10 +195,10 @@ export function ParallaxCards({
         <>
             <section id="lookbook" className="relative z-20 bg-brand-black px-5 py-20 md:hidden">
                 <div className="text-center">
-                    <h2 className="font-heading text-xs font-bold tracking-[0.35em] text-brand-gold">
+                    <h2 className="font-heading text-xs font-book uppercase tracking-[0.35em] text-brand-gold">
                         Lookbook
                     </h2>
-                    <p className="mt-3 font-heading text-2xl font-bold tracking-[0.08em] text-brand-white">
+                    <p className="mt-3 font-heading text-2xl font-book uppercase tracking-[0.08em] text-brand-white">
                         Muses &amp; Masterpieces
                     </p>
                     <p className="mx-auto mt-3 max-w-xs font-body text-sm text-brand-white/50">
@@ -238,11 +238,11 @@ export function ParallaxCards({
             >
                 {/* Header */}
                 <div className="relative z-40 flex-shrink-0 px-6 pt-24 pb-4 text-center md:pt-28">
-                    <h2 className="font-heading text-xs font-bold tracking-[0.5em] text-brand-gold">
+                    <h2 className="font-heading text-xs font-book uppercase tracking-[0.5em] text-brand-gold">
                         Lookbook
                     </h2>
                     <DrawLineLink className="mt-3 text-brand-gold" strokeWidth={18}>
-                        <span className="font-heading text-2xl font-bold tracking-[0.12em] text-brand-white md:text-4xl">
+                        <span className="font-heading text-2xl font-book uppercase tracking-[0.12em] text-brand-white md:text-4xl">
                             Muses &amp; Masterpieces
                         </span>
                     </DrawLineLink>
