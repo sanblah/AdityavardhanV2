@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const comingSoonOnly = process.env.COMING_SOON_ONLY === "true";
+const comingSoonOnly = process.env.COMING_SOON_ONLY !== "false";
 
 export function proxy(request: NextRequest) {
     if (!comingSoonOnly) {
