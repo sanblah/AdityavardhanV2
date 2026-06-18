@@ -7,14 +7,13 @@ import { PageTransition } from "@/components/layout/PageTransition";
 
 interface SiteChromeProps {
     children: React.ReactNode;
-    forceStandalone?: boolean;
 }
 
 const standaloneRoutes = new Set(["/coming-soon"]);
 
-export function SiteChrome({ children, forceStandalone = false }: SiteChromeProps) {
+export function SiteChrome({ children }: SiteChromeProps) {
     const pathname = usePathname();
-    const isStandalone = forceStandalone || standaloneRoutes.has(pathname);
+    const isStandalone = standaloneRoutes.has(pathname);
 
     return (
         <>

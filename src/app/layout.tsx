@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { headers } from "next/headers";
 import "./globals.css";
 import { SiteChrome } from "@/components/layout/SiteChrome";
 
@@ -29,18 +28,15 @@ export const metadata: Metadata = {
     keywords: ["fashion", "premium", "luxury", "bespoke", "tailoring"],
 };
 
-export default async function RootLayout({
+export default function RootLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const requestHeaders = await headers();
-    const forceStandalone = requestHeaders.get("x-adityavardhan-standalone") === "1";
-
     return (
         <html lang="en" className={avantGarde.variable}>
             <body>
-                <SiteChrome forceStandalone={forceStandalone}>{children}</SiteChrome>
+                <SiteChrome>{children}</SiteChrome>
             </body>
         </html>
     );
