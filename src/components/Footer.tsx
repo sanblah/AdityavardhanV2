@@ -1,114 +1,28 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BrandLogo } from "./BrandLogo";
-
-const pageLinks = [
-    { name: "Bespoke", href: "/bespoke" },
-    { name: "Journal", href: "/journal" },
-    { name: "Appointment", href: "/appointment" },
-];
-
-const socialLinks = [
-    { name: "Instagram", href: "#" },
-    { name: "Facebook", href: "#" },
-    { name: "Pinterest", href: "#" },
-];
+import { homepageNavigation } from "./home/homepage-content";
 
 export function Footer() {
     const pathname = usePathname();
-    const isAppointmentPage = pathname === "/appointment";
-
-    // Per content guide: footer appears on all pages except Appointment
-    if (isAppointmentPage) return null;
-
+    if (pathname === "/appointment") return null;
     return (
-        <footer className="relative z-20 overflow-hidden bg-brand-black">
-            {/* CTA Section */}
-            <div className="relative flex min-h-[52svh] flex-col justify-center border-t border-brand-gold/20 py-14 md:min-h-[85vh] md:py-20">
-                {/* Ambient Glow */}
-                <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-gold/5 blur-[150px] md:h-[500px] md:w-[500px]" />
+        <footer className="relative border-t border-brand-gold/20 bg-brand-black px-6 pb-8 pt-16 md:px-12 md:pt-20">
+            <div className="mx-auto max-w-7xl">
+                <div className="grid gap-12 md:grid-cols-[1.3fr_1fr]">
+                    <div>
+                        <Link href="/#top" aria-label="Adityavardhan home" className="inline-block"><BrandLogo className="h-auto w-[240px] md:w-[310px]" alt="ADITYAVARDHAN" /></Link>
+                        <p className="mt-6 max-w-sm text-sm leading-7 text-brand-white/65">True bespoke menswear · Contemporary design · Couture handcraft</p>
+                        <p className="mt-4 text-xs text-brand-gold">Kala Ghoda, Mumbai</p>
+                    </div>
+                    <nav aria-label="Footer" className="grid grid-cols-2 gap-x-6 gap-y-2 self-start">
+                        {homepageNavigation.map(item => <Link key={item.href} href={item.href} className="flex min-h-11 items-center text-[10px] uppercase leading-6 tracking-[0.16em] text-brand-white/70 transition-colors hover:text-brand-gold">{item.name}</Link>)}
+                        <Link href="/appointment" className="flex min-h-11 items-center text-[10px] uppercase tracking-[0.16em] text-brand-white/70 hover:text-brand-gold">Contact</Link>
+                    </nav>
                 </div>
-
-                <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
-                    className="relative z-10 mx-auto max-w-4xl px-6 text-center"
-                >
-                    <h2 className="font-heading text-sm uppercase tracking-[0.4em] text-brand-gold">
-                        Get in Touch
-                    </h2>
-                    <p className="mt-6 text-balance font-heading text-3xl font-book uppercase tracking-[0.04em] text-brand-white md:text-4xl md:tracking-[0.06em] lg:text-6xl">
-                        Let&apos;s Make Your Dreams Come True
-                    </p>
-                    <p className="mx-auto mt-6 max-w-lg text-brand-white/60">
-                        Reach out to begin your bespoke journey
-                    </p>
-
-                    <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="mt-10 inline-block"
-                    >
-                        <Link
-                            href="/appointment"
-                            className="inline-flex min-h-12 max-w-full items-center justify-center gap-3 rounded-full border border-brand-gold bg-transparent px-6 py-4 text-center font-heading text-xs uppercase tracking-[0.16em] text-brand-gold transition-all duration-300 hover:bg-brand-gold hover:text-brand-black md:px-8 md:text-sm md:tracking-[0.2em]"
-                        >
-                            <span>Book Appointment</span>
-                            <span className="text-lg">&rarr;</span>
-                        </Link>
-                    </motion.div>
-                </motion.div>
-            </div>
-
-            {/* Footer Bottom */}
-            <div className="border-t border-brand-gold/10 bg-brand-black px-6 py-8">
-                <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
-                    {/* Logo */}
-                    <Link
-                        href="/"
-                        className="transition-opacity hover:opacity-80"
-                        aria-label="Home"
-                    >
-                        <BrandLogo className="h-auto w-[190px] md:w-[230px]" alt="Brand logo" />
-                    </Link>
-
-                    {/* Page Links */}
-                    <div className="flex flex-wrap justify-center gap-4 md:gap-8">
-                        {pageLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                href={link.href}
-                                className="font-body text-xs uppercase tracking-[0.15em] text-brand-white/50 transition-colors hover:text-brand-gold"
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
-                    </div>
-
-                    {/* Social Links */}
-                    <div className="flex flex-wrap justify-center gap-4 md:gap-8">
-                        {socialLinks.map((link) => (
-                            <a
-                                key={link.name}
-                                href={link.href}
-                                className="font-body text-xs uppercase tracking-[0.15em] text-brand-white/50 transition-colors hover:text-brand-gold"
-                            >
-                                {link.name}
-                            </a>
-                        ))}
-                    </div>
-
-                    {/* Copyright */}
-                    <div className="font-body text-xs text-brand-white/30">
-                        &copy; {new Date().getFullYear()} AdityaVardhan. All rights reserved.
-                    </div>
-                </div>
+                <p className="mt-14 border-t border-brand-white/10 pt-7 text-[10px] tracking-[0.05em] text-brand-white/45">© {new Date().getFullYear()} Adityavardhan. All rights reserved.</p>
             </div>
         </footer>
     );

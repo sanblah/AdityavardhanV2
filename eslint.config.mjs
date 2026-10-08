@@ -8,6 +8,7 @@ const eslintConfig = [
     ignores: [
       ".next/**",
       "node_modules/**",
+      "node_modules.offloaded-backup/**",
       "out/**",
       "build/**",
       "public/**",

@@ -6,13 +6,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DrawLineLink } from "./DrawLineLink";
 import { BrandLogo } from "./BrandLogo";
+import { homepageNavigation } from "./home/homepage-content";
 
-const navItems = [
-    { name: "Home", href: "/" },
-    { name: "Bespoke", href: "/bespoke" },
-    { name: "Journal", href: "/journal" },
-    { name: "Appointment", href: "/appointment" },
-];
+const navItems = homepageNavigation;
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -23,6 +19,7 @@ export function Navbar() {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 50);
         };
+        handleScroll();
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
@@ -63,7 +60,6 @@ export function Navbar() {
 
     const handleNavClick = () => {
         closeMobileMenu();
-        window.requestAnimationFrame(() => window.scrollTo(0, 0));
     };
 
     return (
@@ -75,14 +71,14 @@ export function Navbar() {
                 transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                 className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${
                     isScrolled
-                        ? "bg-brand-white/10 backdrop-blur-xl border-b border-brand-white/10 shadow-lg shadow-brand-black/10"
+                        ? "bg-brand-black/90 backdrop-blur-xl border-b border-brand-white/10"
                         : "bg-transparent"
                 }`}
             >
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 md:px-12">
                     {/* Logo */}
                     <Link
-                        href="/"
+                        href="/#top"
                         scroll
                         className="transition-opacity hover:opacity-80"
                         aria-label="Home"
@@ -96,14 +92,14 @@ export function Navbar() {
                     </Link>
 
                     {/* Desktop Links */}
-                    <div className="hidden items-center gap-2 md:flex">
+                    <div className="hidden items-center gap-2 lg:flex">
                         {navItems.map((item) => (
                             <Link key={item.name} href={item.href} scroll onClick={handleNavClick}>
                                 <DrawLineLink
                                     className="text-brand-gold/80"
                                 >
                                     <span
-                                        className={`font-body text-xs uppercase tracking-[0.2em] transition-colors hover:text-brand-white ${
+                                        className={`font-body text-[10px] uppercase tracking-[0.16em] transition-colors hover:text-brand-white ${
                                             pathname === item.href
                                                 ? "text-brand-gold"
                                                 : "text-brand-white/70"
@@ -119,7 +115,7 @@ export function Navbar() {
                     {/* Mobile Toggle */}
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="relative z-50 flex h-11 w-11 items-center justify-center md:hidden"
+                        className="relative z-50 flex h-11 w-11 items-center justify-center lg:hidden"
                         aria-label="Toggle menu"
                         aria-expanded={isOpen}
                         aria-controls="mobile-navigation"
@@ -151,7 +147,7 @@ export function Navbar() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed inset-0 z-40 flex min-h-[100dvh] items-center justify-center bg-brand-black/90 px-6 backdrop-blur-2xl md:hidden"
+                        className="fixed inset-0 z-40 flex min-h-[100dvh] items-center justify-center bg-brand-black/95 px-6 backdrop-blur-2xl lg:hidden"
                         style={{
                             paddingTop: "calc(5rem + var(--safe-top))",
                             paddingBottom: "calc(2rem + var(--safe-bottom))",

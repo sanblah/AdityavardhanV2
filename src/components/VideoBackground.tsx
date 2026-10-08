@@ -1,217 +1,78 @@
 "use client";
 
-import Image from "next/image";
-import { useRef, useEffect, useState } from "react";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { useEffect, useRef, useState } from "react";
 
 export function VideoBackground() {
     const videoRef = useRef<HTMLVideoElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const motionLayerRef = useRef<HTMLDivElement>(null);
-    const isMobile = useIsMobile();
-    const prefersReducedMotion = usePrefersReducedMotion();
-    const shouldUsePosterOnly = prefersReducedMotion;
-    const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
-    const [isVideoReady, setIsVideoReady] = useState(false);
-    const isVideoVisible = !shouldUsePosterOnly && isVideoReady;
-    const LOOP_START = 0;
-    const LOOP_END = 14.5;
+    const allowPlayback = useRef(true);
+    const inView = useRef(true);
+    const [playing, setPlaying] = useState(false);
+    const [failed, setFailed] = useState(false);
 
     useEffect(() => {
-        if (shouldUsePosterOnly) return;
-
-        const container = containerRef.current;
-        if (!container) return;
-
-        let timeoutId: ReturnType<typeof setTimeout> | null = null;
-        let observer: IntersectionObserver | null = null;
-
-        const scheduleVideoLoad = () => {
-            timeoutId = setTimeout(() => {
-                setShouldLoadVideo(true);
-            }, isMobile ? 1200 : 700);
-        };
-
-        observer = new IntersectionObserver(
-            (entries) => {
-                const entry = entries[0];
-                if (!entry?.isIntersecting) return;
-                scheduleVideoLoad();
-                observer?.disconnect();
-            },
-            { threshold: 0.15 }
-        );
-
-        observer.observe(container);
-
-        return () => {
-            observer?.disconnect();
-            if (timeoutId) clearTimeout(timeoutId);
-        };
-    }, [isMobile, shouldUsePosterOnly]);
-
-    useEffect(() => {
-        if (shouldUsePosterOnly) return;
-
         const video = videoRef.current;
-        if (!video || !shouldLoadVideo) return;
-
-        const playVideo = () => {
-            const playAttempt = video.play();
-            if (!playAttempt) return;
-
-            playAttempt.catch(() => {
+        if (!video) return;
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        allowPlayback.current = !reducedMotion.matches;
+        const syncPlayback = () => {
+            if (allowPlayback.current && inView.current && !document.hidden) {
                 video.muted = true;
-                void video.play().catch(() => {
-                    setIsVideoReady(false);
-                });
-            });
+                // Keep the play control available if the browser blocks autoplay.
+                void video.play().catch(() => {});
+            } else video.pause();
         };
-
-        video.volume = 0;
-        video.currentTime = LOOP_START;
-
-        const handleTimeUpdate = () => {
-            if (video.currentTime >= LOOP_END || video.currentTime < LOOP_START) {
-                video.currentTime = LOOP_START;
-            }
+        const observer = new IntersectionObserver(([entry]) => {
+            inView.current = entry.isIntersecting;
+            syncPlayback();
+        }, { threshold: 0.05 });
+        const onMotionChange = () => {
+            allowPlayback.current = !reducedMotion.matches;
+            syncPlayback();
         };
-
-        const handleLoadedData = () => {
-            playVideo();
-        };
-
-        const handlePlaying = () => {
-            setIsVideoReady(true);
-        };
-
-        video.addEventListener("timeupdate", handleTimeUpdate);
-        video.addEventListener("loadeddata", handleLoadedData);
-        video.addEventListener("playing", handlePlaying);
-
-        video.load();
-
-        if (video.readyState >= 2) {
-            handleLoadedData();
-        }
-
+        observer.observe(video);
+        document.addEventListener("visibilitychange", syncPlayback);
+        reducedMotion.addEventListener("change", onMotionChange);
+        syncPlayback();
         return () => {
-            video.removeEventListener("timeupdate", handleTimeUpdate);
-            video.removeEventListener("loadeddata", handleLoadedData);
-            video.removeEventListener("playing", handlePlaying);
+            observer.disconnect();
+            document.removeEventListener("visibilitychange", syncPlayback);
+            reducedMotion.removeEventListener("change", onMotionChange);
+            video.pause();
         };
-    }, [shouldLoadVideo, shouldUsePosterOnly]);
+    }, []);
 
-    useEffect(() => {
-        const layer = motionLayerRef.current;
-        if (!layer) return;
-
-        if (isMobile) {
-            layer.style.transform = "scale(1.05)";
-            layer.style.willChange = "auto";
+    const togglePlayback = async () => {
+        const video = videoRef.current;
+        if (!video) return;
+        if (!video.paused) {
+            allowPlayback.current = false;
+            video.pause();
             return;
         }
-
-        let rafId = 0;
-        let targetX = 0;
-        let targetY = 0;
-        let currentX = 0;
-        let currentY = 0;
-
-        const applyTransform = () => {
-            layer.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) scale(1.15)`;
-            layer.style.willChange = "transform";
-        };
-
-        const animate = () => {
-            currentX += (targetX - currentX) * 0.08;
-            currentY += (targetY - currentY) * 0.08;
-            applyTransform();
-
-            const deltaX = Math.abs(targetX - currentX);
-            const deltaY = Math.abs(targetY - currentY);
-            if (deltaX > 0.1 || deltaY > 0.1) {
-                rafId = window.requestAnimationFrame(animate);
-                return;
-            }
-
-            currentX = targetX;
-            currentY = targetY;
-            applyTransform();
-            rafId = 0;
-        };
-
-        const queueAnimation = () => {
-            if (rafId !== 0) return;
-            rafId = window.requestAnimationFrame(animate);
-        };
-
-        const handleMouseMove = (event: MouseEvent) => {
-            const x = (event.clientX / window.innerWidth - 0.5) * 2;
-            const y = (event.clientY / window.innerHeight - 0.5) * 2;
-            targetX = x * 30;
-            targetY = y * 20;
-            queueAnimation();
-        };
-
-        const handleMouseLeave = () => {
-            targetX = 0;
-            targetY = 0;
-            queueAnimation();
-        };
-
-        applyTransform();
-
-        window.addEventListener("mousemove", handleMouseMove);
-        window.addEventListener("mouseleave", handleMouseLeave);
-
-        return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseleave", handleMouseLeave);
-            if (rafId !== 0) {
-                window.cancelAnimationFrame(rafId);
-            }
-        };
-    }, [isMobile]);
+        allowPlayback.current = true;
+        if (failed) video.load();
+        try {
+            await video.play();
+            setFailed(false);
+        } catch { setFailed(true); }
+    };
 
     return (
-        <div ref={containerRef} className="fixed inset-0 z-0 overflow-hidden">
-            <div
-                ref={motionLayerRef}
-                className={
-                    isMobile
-                        ? "absolute inset-[-2%] h-[104%] w-[104%]"
-                        : "absolute inset-[-8%] h-[116%] w-[116%]"
-                }
-            >
-                <Image
-                    src="/images/hero/hero-video-poster.jpg"
-                    alt=""
-                    fill
-                    priority
-                    aria-hidden="true"
-                    className={`object-cover transition-opacity duration-700 ${isVideoVisible ? "opacity-0" : "opacity-100"}`}
-                    sizes="100vw"
-                />
-                <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    muted
-                    preload="none"
-                    poster="/images/hero/hero-video-poster.jpg"
-                    aria-hidden="true"
-                    tabIndex={-1}
-                    className={`h-full w-full object-cover transition-opacity duration-700 ${isVideoVisible ? "opacity-100" : "opacity-0"}`}
-                >
-                    {!shouldUsePosterOnly && shouldLoadVideo ? (
-                        <source src="/videos/hero-video-optimized.mp4" type="video/mp4" />
-                    ) : null}
-                </video>
-            </div>
-            {/* Soft overlay */}
-            <div className="absolute inset-0 bg-brand-black/40" />
+        <div className="absolute inset-0">
+            <video ref={videoRef} id="homepage-film" src="/videos/hero-video-optimized.mp4?v=trimmed-20261008"
+                poster="/images/hero/hero-video-poster.jpg" muted playsInline loop preload="metadata"
+                aria-hidden="true" tabIndex={-1}
+                onPlaying={() => setPlaying(true)} onPause={() => setPlaying(false)}
+                onError={() => { setFailed(true); setPlaying(false); }}
+                className="h-full w-full object-cover" />
+            <div className="pointer-events-none absolute inset-0 bg-brand-black/35" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-black/80 via-transparent to-brand-black/20" />
+            <button type="button" onClick={togglePlayback} aria-controls="homepage-film"
+                className="absolute bottom-4 right-5 z-20 flex min-h-11 items-center gap-3 px-2 text-[10px] uppercase tracking-[0.2em] text-brand-white/80 transition-colors hover:text-brand-white md:bottom-6 md:right-10">
+                <span aria-hidden="true" className="text-sm">{playing ? "Ⅱ" : "▷"}</span>
+                {failed ? "Retry film" : playing ? "Pause film" : "Play film"}
+            </button>
+            {failed && <p role="status" className="absolute bottom-16 right-7 z-20 max-w-52 text-right text-xs text-brand-white/80">The film could not play. Please try again.</p>}
         </div>
     );
 }

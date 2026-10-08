@@ -13,9 +13,15 @@ export function PageTransition({ children }: { children: ReactNode }) {
         }
 
         const scrollToTop = () => {
-            window.scrollTo(0, 0);
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
+            // Preserve homepage section links when returning from another route.
+            if (window.location.hash) {
+                const target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+                if (target) {
+                    target.scrollIntoView({ behavior: "instant", block: "start" });
+                    return;
+                }
+            }
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         };
 
         scrollToTop();

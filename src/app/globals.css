@@ -110,6 +110,52 @@ body {
   font-weight: 300;
 }
 
+.editorial-label {
+  font-size: 0.65rem;
+  line-height: 1.8;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-brand-gold);
+}
+
+.editorial-heading {
+  font-size: clamp(2.1rem, 4.5vw, 4.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  font-weight: 300;
+  text-wrap: balance;
+}
+
+.editorial-body {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: rgb(255 255 255 / 0.7);
+}
+
+.editorial-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.4);
+  padding-block: 0.75rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: color 200ms ease, border-color 200ms ease;
+}
+
+.editorial-link:hover {
+  color: var(--color-accent-light);
+  border-color: var(--color-brand-gold);
+}
+
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 5px;
+}
+
 /* ===== Draw Line Underline (pure CSS) ===== */
 .draw-link {
   cursor: pointer;

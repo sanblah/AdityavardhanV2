@@ -4,8 +4,9 @@ import { useRef } from "react";
 import Image from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
-const steps = [
+const defaultSteps = [
     {
         number: "01",
         title: "Consultation",
@@ -43,15 +44,22 @@ const steps = [
     },
 ];
 
-export function ProcessTimeline() {
+interface ProcessTimelineProps {
+    steps?: Array<{ number: string; title: string; description: string; image: string; imageAlt?: string }>;
+    eyebrow?: string;
+}
+
+export function ProcessTimeline({ steps = defaultSteps, eyebrow = "Steps to the Perfect You" }: ProcessTimelineProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
     const isMobile = useIsMobile();
+    const reducedMotion = usePrefersReducedMotion();
+    const staticLayout = isMobile || reducedMotion;
 
     useGSAP(() => {
         // Mobile uses a plain stacked layout — no pin/scrub (pinning is
         // unreliable when the section height changes on the isMobile flip).
-        if (isMobile) return;
+        if (staticLayout) return;
         if (!containerRef.current || !panelRef.current) return;
         const panels = Array.from(
             panelRef.current.querySelectorAll<HTMLElement>(".timeline-step")
@@ -94,9 +102,9 @@ export function ProcessTimeline() {
             tl.scrollTrigger?.kill();
             tl.kill();
         };
-    }, { scope: containerRef, dependencies: [isMobile] });
+    }, { scope: containerRef, dependencies: [staticLayout, steps], revertOnUpdate: true });
 
-    if (isMobile) {
+    if (staticLayout) {
         return (
             <section
                 ref={containerRef}
@@ -104,14 +112,14 @@ export function ProcessTimeline() {
             >
                 <div className="text-center">
                     <p className="font-heading text-xs uppercase tracking-[0.4em] text-brand-gold">
-                        Steps to the Perfect You
+                        {eyebrow}
                     </p>
                     <h2 className="mt-3 font-heading text-2xl font-book uppercase tracking-[0.08em] text-brand-white">
                         From Vision to Heirloom
                     </h2>
                 </div>
 
-                <div className="mt-10 space-y-14">
+                <div className="mx-auto mt-10 max-w-3xl space-y-14">
                     {steps.map((step) => (
                         <div key={step.number}>
                             <span className="font-heading text-5xl font-book text-brand-gold/20">
@@ -120,13 +128,13 @@ export function ProcessTimeline() {
                             <h3 className="mt-2 font-heading text-xl font-book uppercase tracking-[0.08em] text-brand-white">
                                 {step.title}
                             </h3>
-                            <p className="mt-3 font-body text-[13px] font-book leading-7 text-brand-white/60">
+                            <p className="mt-3 whitespace-pre-line font-body text-sm font-book leading-7 text-brand-white/70">
                                 {step.description}
                             </p>
                             <div className="relative mt-5 aspect-[4/5] w-full overflow-hidden rounded-sm">
                                 <Image
                                     src={step.image}
-                                    alt={step.title}
+                                    alt={step.imageAlt ?? step.title}
                                     fill
                                     className="object-cover"
                                     sizes="100vw"
@@ -152,7 +160,7 @@ export function ProcessTimeline() {
             >
                 <div className="relative z-10 flex-shrink-0 px-6 pb-6 pt-24 text-center md:pt-28">
                     <p className="font-heading text-xs uppercase tracking-[0.4em] text-brand-gold">
-                        Steps to the Perfect You
+                        {eyebrow}
                     </p>
                     <h2 className="mt-3 font-heading text-2xl font-book uppercase tracking-[0.08em] text-brand-white md:text-4xl">
                         From Vision to Heirloom
@@ -181,7 +189,7 @@ export function ProcessTimeline() {
                                     <h3 className="mt-3 font-heading text-lg font-book uppercase tracking-[0.08em] text-brand-white md:mt-4 md:text-2xl lg:text-4xl">
                                         {step.title}
                                     </h3>
-                                    <p className="mt-4 max-w-xl font-body text-[13px] font-book leading-relaxed text-brand-white/60 md:mt-6 md:text-base">
+                                    <p className="mt-4 max-w-xl whitespace-pre-line font-body text-[13px] font-book leading-relaxed text-brand-white/70 md:mt-6 md:text-base">
                                         {step.description}
                                     </p>
                                 </div>
@@ -189,7 +197,7 @@ export function ProcessTimeline() {
                                 <div className="relative mx-auto aspect-[3/4] h-full max-h-[58vh] w-full max-w-md self-center overflow-hidden rounded-sm">
                                     <Image
                                         src={step.image}
-                                        alt={step.title}
+                                        alt={step.imageAlt ?? step.title}
                                         fill
                                         className="object-cover"
                                         sizes="(max-width: 768px) 100vw, 50vw"
